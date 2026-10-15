@@ -1,0 +1,610 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Move chart</title>
+<style>
+  :root{--bg:#131722;--panel:#1b1f2a;--grid:#1e222d;--border:#2a2e39;--txt:#b8c0cc;--mut:#787b86;--up:#26a69a;--dn:#ef5350;--accent:#2962ff}
+  html,body{margin:0;height:100%;background:var(--bg);color:var(--txt);font-family:"Segoe UI Variable Text","Segoe UI",-apple-system,Inter,Roboto,Helvetica,Arial,sans-serif}
+  body{display:flex;flex-direction:column;overflow-y:auto}
+  #bar{padding:7px 12px;border-bottom:1px solid var(--border);font-size:13px;flex:0 0 auto;display:flex;align-items:center;flex-wrap:wrap;gap:6px 8px;background:var(--panel)}
+  #bar b{font-weight:600;color:#eaecef;margin-right:4px}
+  .br{flex-basis:100%;height:0}
+  .lbl{color:var(--mut);font-size:10px;text-transform:uppercase;letter-spacing:.05em;margin-right:2px}
+  .pill{display:inline-block;padding:1px 9px;border-radius:10px;font-size:12px}
+  .g{background:rgba(38,166,154,.16);color:#2db3a6}.r{background:rgba(239,83,80,.16);color:#ef5350}.b{background:rgba(41,98,255,.18);color:#6f9bff}
+  .seg{display:inline-flex;border:1px solid var(--border);border-radius:6px;overflow:hidden}
+  .tf{padding:3px 11px;font-size:12px;background:var(--panel);color:#aeb4c0;cursor:pointer;user-select:none;border-right:1px solid var(--border)}
+  .tf:last-child{border-right:none}
+  .tf.on{background:var(--accent);color:#fff;font-weight:600}
+  .tf:hover:not(.on){background:#262b38}
+  .note{color:var(--mut);font-size:12px}
+  #price{position:relative;flex:0 0 auto;height:56vh;min-height:300px}
+  #chart{position:absolute;inset:0}
+  #detail{flex:0 0 auto;padding:14px 14px 24px}
+  .dsec{color:var(--mut);font-size:12px;text-transform:uppercase;letter-spacing:.05em;margin:6px 0 10px}
+  .dgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px}
+  .dcard{background:var(--panel);border:1px solid var(--border);border-radius:8px;padding:11px 13px}
+  .dcard .k{font-size:12px;color:var(--mut)}
+  .dcard .v{font-size:19px;font-weight:600;color:#eaecef;margin-top:3px}
+  .pcard{border:1px dashed #3a4150;border-radius:10px;padding:13px}
+  .pcard .t{font-size:14px;font-weight:600;color:#aeb4c0;margin-bottom:5px}
+  .pcard .d{font-size:12px;color:var(--mut);line-height:1.6}
+  #legend{position:absolute;left:11px;top:8px;font-size:12px;z-index:4;pointer-events:none;font-variant-numeric:tabular-nums;line-height:1.55;text-shadow:0 1px 3px var(--bg)}
+  #tip{position:absolute;display:none;pointer-events:none;background:var(--panel);border:1px solid var(--border);color:var(--txt);font-size:12px;padding:6px 9px;border-radius:6px;white-space:nowrap;z-index:6;font-variant-numeric:tabular-nums;box-shadow:0 3px 12px rgba(0,0,0,.45)}
+  #pricefloat{position:absolute;display:none;pointer-events:none;background:var(--accent);color:#fff;font-size:11px;padding:2px 7px;border-radius:3px;white-space:nowrap;z-index:7;font-variant-numeric:tabular-nums}
+  #draw{position:absolute;top:0;left:0;width:100%;height:100%;z-index:3;cursor:crosshair}
+  #draw.off{pointer-events:none;cursor:default}
+  #dtools{position:absolute;left:7px;top:48px;z-index:5;display:flex;flex-direction:column;gap:3px}
+  .dtool{width:30px;height:28px;display:flex;align-items:center;justify-content:center;background:rgba(27,31,42,.92);border:1px solid var(--border);border-radius:5px;color:#aeb4c0;cursor:pointer;font:15px "Segoe UI Variable Text","Segoe UI",-apple-system,Inter,Roboto,Helvetica,Arial,sans-serif;user-select:none}
+  .dtool.on{background:var(--accent);color:#fff;border-color:var(--accent)}
+  .dtool:hover:not(.on){background:#2a3140;color:#fff}
+  #msg{padding:14px;font-size:14px;color:#ef5350;flex:0 0 auto}
+  #msg:empty{display:none}
+</style>
+</head>
+<body>
+<div id="bar">Loading…</div>
+<div id="price"><div id="chart"></div><canvas id="draw" class="off"></canvas><div id="dtools"></div><div id="legend"></div><div id="tip"></div><div id="pricefloat"></div></div>
+<div id="detail"></div>
+<div id="msg"></div>
+<script src="lightweight-charts.js"></script>
+<script>
+(async function(){
+  const bar=document.getElementById('bar'), msg=document.getElementById('msg');
+  const q=new URLSearchParams(location.search);
+  let data;
+  try{
+    if(window.chartAPI){                                            // inside the app -> 1-minute candles via IPC (the SAME data the table's engine uses, so move counts match exactly)
+      const sym=q.get('sym'); const r=await window.chartAPI.getCandles(sym, q.get('acls')||q.get('cls')||'');   // acls = the asset's REAL class (cls is 'zones' on the Zones tab -> wrong candle file for an aliased ticker)
+      if(!r||!r.candles||r.candles.length<2) throw new Error('no data for '+(sym||'?'));
+      data={ sym:String(sym||'').toUpperCase(), candles:r.candles, minBase:+q.get('minBase')||5, base:+q.get('base')||20 };
+    } else {                                                        // lab fallback -> a precomputed file
+      const df=q.get('d')||'_chart_trx_20_r.json';
+      const res=await fetch(df,{cache:'no-store'}); if(!res.ok)throw new Error('HTTP '+res.status); data=await res.json();
+    }
+  }
+  catch(e){ msg.textContent='Could not load data: '+e.message; bar.textContent='chart — data load failed'; return; }
+  if(!window.LightweightCharts){ msg.textContent='Charting library failed to load.'; return; }
+  let ROW=(data&&data.row)||null;                                          // per-asset stats: the table row (lab embeds it in the d-file; the app passes it via get-chart-info)
+  let PAT0=(data&&data.pat)||null, PATTF0=(data&&data.patTf)||null;   // lab fallback mirrors the app path: the d-file may carry the pattern the same way it carries the table row
+  let ZONES0=null;                                                        // this asset's range-extreme/flip-zone list, from the Zones tab (read-only overlay, not a user drawing)
+  let FIB0=null;                                                          // 882 tab: the LATCHED fib leg {a,z,l786,l882,l941} -- drawn as horizontal levels, same as his TradingView
+  let ZWIN0=null;                                                         // {start,end} ms -- the exact 90-day extreme-detection window (Nate, 2026-09-26: default view must anchor to the WINDOW, not a zone's own birth time)
+  // docked=1 (Nate, 2026-09-25: right-side panel, not a popup) reads its OWN info channel -- get-docked-chart-info,
+  // not get-chart-info -- so a docked chart and a popup chart (a different tab's) can be open at once without one
+  // clobbering the other's row/zones payload between this page's load and its own info fetch.
+  const DOCKED=q.get('docked')==='1';
+  const infoFn = DOCKED ? (window.chartAPI&&window.chartAPI.getDockedChartInfo) : (window.chartAPI&&window.chartAPI.getChartInfo);
+  if(infoFn){ try{ const info=await infoFn(); if(info&&info.row) ROW=info.row; if(info&&info.pat){ PAT0=info.pat; PATTF0=+info.tf||null; } if(info&&info.zones) ZONES0=info.zones; if(info&&info.fib) FIB0=info.fib; if(info&&info.windowStart&&info.windowEnd) ZWIN0={start:info.windowStart, end:info.windowEnd}; }catch(e){} }
+
+  const LC=LightweightCharts;
+  const BG='#131722', GRID='#1b2029', GRIDV='#181c25', TXT='#b8c0cc', MUT='#787b86', BORDER='#2a2e39', FONT="\"Segoe UI Variable Text\",\"Segoe UI\",-apple-system,Inter,Roboto,Helvetica,Arial,sans-serif";
+  const EMACOL={9:'#b2b5be',13:'#f5c542',21:'#a45deb',50:'#e0529c',200:'#4584c4'};   // 200 added for the Lifer tab — a Lifer signal is price vs the 21 AND the 200, so both must be on the chart
+  // PXP is the asset's own quoting precision, the same number the price axis is formatted with (see
+  // pxPrecision/applyPxFormat below). It is set from the candle data before anything renders.
+  // The old px() was `v>=1 ? toFixed(4) : toPrecision(4)`, which disagreed with the fixed axis in both
+  // directions: BTC's legend read 77214.0000 (four decimals that do not exist) while BTT and NFT read 3.135e-7
+  // in exponential form against an axis correctly showing 0.0000003135.
+  let PXP=2;
+  const px=v=>v==null?'—':v.toFixed(PXP);
+  document.title=(data.sym||'')+' moves';
+
+  // ---- the rule's two knobs + the class noise floor ----
+  // de-wick / de-stub repair — IDENTICAL to engine.js clean(B), so the chart computes moves on the SAME data the
+  // table does and the counts match EXACTLY (raw IPC candles diverge on artifact symbols, e.g. BEAT, until cleaned).
+  function clean(B){ const C=B.map(r=>r.slice()); for(let i=1;i<C.length-1;i++){const o=C[i][1],h=C[i][2],l=C[i][3],c=C[i][4],pc=B[i-1][4],nc=B[i+1][4];const bh=Math.max(o,c),bl=Math.min(o,c);if(l>0&&l<0.5*Math.min(bl,pc,nc))C[i][3]=bl;else if(h>2*Math.max(bh,pc,nc))C[i][2]=bh;}
+    if(C.length>1){ const c0=C[0][4], n1=C[1];
+      if(c0>0 && C[0][3]>0 && C[0][3] < 0.5*Math.min(c0, n1[3]>0?n1[3]:c0)) C[0][3]=Math.min(c0, C[0][2]);
+      if(c0>0 && C[0][2] > 2*Math.max(c0, n1[2]))                           C[0][2]=Math.max(c0, C[0][3]);
+    }
+    return C; }
+  const c5=clean(data.candles);                // CLEANED to match the engine (raw would diverge on artifact symbols); [t,o,h,l,c,v], t in seconds
+  // Set the display precision from the raw 1m candles up front: renderStats and renderDetail can run before the
+  // first render() and would otherwise print at the default 2.
+  PXP=pxPrecision(c5.slice(-400).map(r=>({open:r[1],high:r[2],low:r[3],close:r[4]})));
+  const FLOOR=(data.minBase||5)/100;           // class min base (noise floor) — 5% crypto/stocks, 3% metals
+  let activePF=+q.get('pf')||25;               // pullback filter % — opens matching the table's current selection
+  let activeBase=data.base||20;                // move size % (the counted-move threshold)
+  let activeTF=+q.get('tf')||1440, CS=[], E={};   // a caller can open the chart ON a timeframe (Lifer passes the one its row was read on); no tf param = the 1D it has always opened on
+  let inFrac5=new Array(c5.length).fill(0);    // per-5m in-move, rebuilt by computeMoves()
+  let MV={segs:[],markers:[],gaps:[],legs:[],moveCount:0,inPct:0};
+
+  // a move ends when price pulls back BOTH >= activePF% of the move AND >= the class floor. The move size filters which count.
+  function retraceZig(A,retrace,floor){
+    const piv=[{p:A[0][4],t:A[0][0],i:0}]; let dir=0,anchorP=A[0][4];
+    let hi=A[0][2],hiI=0,lo=A[0][3],loI=0,extP=A[0][4],extI=0;
+    for(let i=1;i<A.length;i++){
+      const h=A[i][2],l=A[i][3];
+      if(dir>=0&&h>hi){hi=h;hiI=i;} if(dir<=0&&l<lo){lo=l;loI=i;}
+      if(dir===0){ if((hi-anchorP)/anchorP>=floor){dir=1;extP=hi;extI=hiI;lo=l;loI=i;} else if((anchorP-lo)/anchorP>=floor){dir=-1;extP=lo;extI=loI;hi=h;hiI=i;} }
+      if(dir===1){ if(h>extP){extP=h;extI=i;lo=l;loI=i;} else if(l<lo){lo=l;loI=i;} const retr=(extP-lo)/(extP-anchorP),pull=(extP-lo)/extP; if(retr>=retrace&&pull>=floor){piv.push({p:extP,t:A[extI][0],i:extI});anchorP=extP;dir=-1;extP=lo;extI=loI;hi=h;hiI=i;} }
+      else if(dir===-1){ if(l<extP){extP=l;extI=i;hi=h;hiI=i;} else if(h>hi){hi=h;hiI=i;} const retr=(hi-extP)/(anchorP-extP),pull=(hi-extP)/extP; if(retr>=retrace&&pull>=floor){piv.push({p:extP,t:A[extI][0],i:extI});anchorP=extP;dir=1;extP=hi;extI=hiI;lo=l;loI=i;} }
+    }
+    if(dir!==0&&extI!==piv[piv.length-1].i) piv.push({p:extP,t:A[extI][0],i:extI});
+    return piv;
+  }
+  function computeMoves(){
+    const piv=retraceZig(c5,activePF/100,FLOOR), n=c5.length, inArr=new Array(n).fill(false);
+    const segs=[],markers=[],legs=[]; let cur=null,moveCount=0;
+    for(let k=1;k<piv.length;k++){ const a=piv[k-1],b=piv[k],pct=(b.p-a.p)/a.p*100;
+      if(Math.abs(pct)>=activeBase){ moveCount++;
+        if(!cur)cur=[[a.t,+a.p.toFixed(6)]]; let t1=b.t; const L=cur[cur.length-1]; if(t1<=L[0])t1=L[0]+1; cur.push([t1,+b.p.toFixed(6)]);
+        markers.push([b.t,+pct.toFixed(1)]); legs.push({t0:a.t,t1:b.t,v0:a.p,v1:b.p,pct});
+        for(let i=a.i;i<=b.i;i++) inArr[i]=true;
+      } else if(cur){ segs.push(cur); cur=null; } }
+    if(cur) segs.push(cur);
+    inFrac5=inArr.map(v=>v?1:0);
+    const gaps=[]; let st=-1;
+    for(let i=0;i<n;i++){ if(!inArr[i]){ if(st<0)st=i; } else if(st>=0){ gaps.push([c5[st][0],c5[i-1][0],+((c5[i-1][0]-c5[st][0])/86400).toFixed(2)]); st=-1; } }
+    if(st>=0) gaps.push([c5[st][0],c5[n-1][0],+((c5[n-1][0]-c5[st][0])/86400).toFixed(2)]);
+    let inm=0; for(let i=0;i<n;i++) if(inArr[i]) inm++;
+    MV={segs,markers,gaps,legs,moveCount,inPct:Math.round(100*inm/n)};
+  }
+
+  function aggregate(tfMin){
+    // every timeframe is bucketed below — c5 may be 1-minute (app) or 5-minute (lab), so no 5m fast-path
+    const span=tfMin*60, m=new Map();
+    for(let i=0;i<c5.length;i++){ const c=c5[i], b=Math.floor(c[0]/span)*span; let x=m.get(b);
+      if(!x){ x={time:b,open:c[1],high:c[2],low:c[3],close:c[4],vol:c[5]||0,inS:inFrac5[i],n:1}; m.set(b,x); }
+      else { if(c[2]>x.high)x.high=c[2]; if(c[3]<x.low)x.low=c[3]; x.close=c[4]; x.vol+=(c[5]||0); x.inS+=inFrac5[i]; x.n++; } }
+    return [...m.values()].sort((a,b)=>a.time-b.time).map(x=>({time:x.time,open:x.open,high:x.high,low:x.low,close:x.close,vol:x.vol,inFrac:x.inS/x.n}));
+  }
+  function ema(vals,p){ const out=new Array(vals.length).fill(null); if(vals.length<p)return out;
+    let sum=0; for(let i=0;i<p;i++)sum+=vals[i]; let e=sum/p; out[p-1]=e; const k=2/(p+1);
+    for(let i=p;i<vals.length;i++){ e=vals[i]*k+e*(1-k); out[i]=e; } return out; }
+
+  // ---- price chart ----
+  const chartEl=document.getElementById('chart');
+  // LOCAL TIME ON THE CHART (Nate, 2026-09-11: "I live in eastern time zone. the time on the charts is off.").
+  // lightweight-charts v4 renders every timestamp as UTC and exposes no timezone option, so on EDT every label read
+  // 4 hours ahead of his clock. FORMAT-ONLY: the series data keeps its UTC epoch seconds, so drawings, saved
+  // visible ranges and the overlay's timeToCoordinate/coordinateToTime are untouched -- only the labels move.
+  // Reading the machine's own zone rather than a hardcoded -4 makes DST correct by itself (verified across both
+  // 2026 transitions: the 01:00 hour repeats on fall-back, 02:00 is skipped on spring-forward).
+  // DATES ARE LOCAL TOO, except one case. A point-in-time readout -- the crosshair, the intraday day divider -- must
+  // agree with his clock and with the app's own columns, which were ALREADY local (liferTime, emaTime). Formatting
+  // those in UTC put "9/11 20:00" under a cursor his clock calls Sep 10 8pm, wrong for 20:00-23:59 every day. The
+  // exception is a DAILY bar, whose label is an identity rather than an instant: it spans 00:00-24:00 UTC, so it
+  // keeps its UTC date and agrees with every exchange.
+  // Year and Month ticks return null, which this build of the library treats as "use your own label" (the minified
+  // source reads `if(null!==e)return e`). Formatting those as M/D dropped the year entirely and rendered 2024 and
+  // 2025 identically as "1/1" on the zoomed-out daily view, which is this chart's default.
+  const tzHM = t => { const d=new Date(t*1000); return String(d.getHours()).padStart(2,"0")+":"+String(d.getMinutes()).padStart(2,"0"); };
+  const tzMD = t => { const d=new Date(t*1000); return (d.getMonth()+1)+"/"+d.getDate(); };                 // local date
+  const tzUTCMD = t => { const d=new Date(t*1000); return (d.getUTCMonth()+1)+"/"+d.getUTCDate(); };        // a daily bar's identity
+  const tzDate = t => (activeTF>=1440 ? tzUTCMD(t) : tzMD(t));
+  const tzStamp = t => (activeTF>=1440 ? tzDate(t) : tzDate(t)+"  "+tzHM(t));
+  const tzTick = (t, type) => (type>=3) ? tzHM(t) : (type<=1 ? null : tzDate(t));   // v4 tickMarkType: 0 Year, 1 Month, 2 DayOfMonth, 3 Time, 4 TimeWithSeconds
+  const chart=LC.createChart(chartEl,{ autoSize:true,
+    layout:{background:{color:BG},textColor:TXT,fontFamily:FONT},
+    grid:{vertLines:{color:GRIDV},horzLines:{color:GRID}},              // verticals fainter than horizontals
+    rightPriceScale:{borderColor:BORDER, minimumWidth:80, scaleMargins:{top:0.10, bottom:0.22}},
+    timeScale:{borderColor:BORDER, timeVisible:false, secondsVisible:false, rightOffset:6, minBarSpacing:0.006, visible:true, tickMarkFormatter:tzTick},
+    localization:{ timeFormatter: tzStamp },   // crosshair label
+    crosshair:{ mode:0, vertLine:{color:'#5d6b85',width:1,style:2,labelBackgroundColor:'#363a45'}, horzLine:{color:'#5d6b85',width:1,style:2,labelBackgroundColor:'#363a45'} },
+    watermark:{visible:true, text:(data.sym||''), color:'rgba(120,123,134,0.09)', fontSize:38, fontFamily:FONT, horzAlign:'center', vertAlign:'center'} });
+  const candle=chart.addCandlestickSeries({upColor:'#26a69a',downColor:'#ef5350',borderVisible:false,wickUpColor:'#26a69a',wickDownColor:'#ef5350',priceScaleId:'right'});
+  const eL=col=>chart.addLineSeries({color:col,lineWidth:1,priceLineVisible:false,lastValueVisible:false,crosshairMarkerVisible:false,priceScaleId:'right'});
+  const ema9=eL(EMACOL[9]), ema13=eL(EMACOL[13]), ema21=eL(EMACOL[21]), ema50=eL(EMACOL[50]);
+  // The 200 DRAWS on the price scale but does not DRIVE it (autoscaleInfoProvider returning null removes a series from
+  // autoscale; returning undefined would throw). At the DEFAULT view this is a no-op by construction — render() calls
+  // fitContent(), and an EMA of closes is a convex combination of those closes, so it can never leave the full high/low
+  // range (note render(false) — every TF change and live tick — RESTORES the prior view, so the zoomed case is the common
+  // one). Zoomed in, including it grew the price range up to 9.6x on 30m (VELVET) and 55.9x on 4h (the symbol `lab`:
+  // candles 0.055-0.174 against an EMA200 of 0.62-3.93) — enough to collapse the candles
+  // into an unreadable sliver. The cost is that part of the 200 line runs off-screen in 20-33% of zoomed 200-bar windows
+  // depending on timeframe — whole line on-screen 74% (30m), 72% (1h), 71% (2h), 67% (4h), 80% (1d); 5m/15m not measured.
+  // That is worth paying: the price scale is then EXACTLY what it was before the 200 existed (guaranteed, not just
+  // measured — v1.4.14 has no 200 at all, so the 'right' scale sees an identical set of series).
+  // All figures above measured over the stored 1m history as of 2026-09-07; they drift as history grows.
+  const ema200=chart.addLineSeries({color:EMACOL[200],lineWidth:1,priceLineVisible:false,lastValueVisible:false,crosshairMarkerVisible:false,priceScaleId:'right',autoscaleInfoProvider:()=>null});
+  // Lifer pattern boundaries (triangle = the two independently fitted converging lines; each line drawn through its own two swing pivots). Dashed, and excluded from autoscale for the same reason the 200 is.
+  // Excluded from autoscale like the 200. Letting them drive it squashed the candles on 14% of rows (worst 9.6x)
+  // and fixed nothing: measured, 0 of 876 rows were ever fully off-screen.
+  const patL=()=>chart.addLineSeries({color:'#ffd479',lineWidth:1,lineStyle:2,priceLineVisible:false,lastValueVisible:false,crosshairMarkerVisible:false,priceScaleId:'right',autoscaleInfoProvider:()=>null});
+  const patU=patL(), patD=patL();
+  // PRICE SCALE PRECISION. lightweight-charts defaults every series to precision 2 / minMove 0.01, so a
+  // sub-dollar asset collapses to a single distinct axis label and the crosshair reads the same rounded number
+  // everywhere. Same defect the Lifer pane had; this is the popup window.
+  // Precision is taken from the FEED'S OWN decimals rather than from price magnitude, because the number of
+  // decimals the exchange quotes is by construction exactly enough to tell two real prices apart. Values below
+  // 1e-6 stringify in exponential form ("2.561e-7") and must be parsed as mantissa-decimals minus exponent —
+  // skipping them leaves BTT and NFT at the floor of 2, which is where this bug bites hardest.
+  // Applied only to the series on the PRICE scale. vol and ribbon live on their own scales and are not prices.
+  function pxPrecision(cs){
+    let d=2;
+    const n=cs.length, from=Math.max(0,n-400);
+    for(let i=from;i<n;i++){
+      const c=cs[i];
+      for(const v of [c.open,c.high,c.low,c.close]){
+        if(!(v>0)) continue;
+        const t=String(v), e=t.indexOf('e');
+        let k;
+        if(e>=0){ const mant=t.slice(0,e), exp=+t.slice(e+1), dot=mant.indexOf('.');
+                  k=(dot<0?0:mant.length-dot-1) - exp; }
+        else { const dot=t.indexOf('.'); if(dot<0) continue; k=t.length-dot-1; }
+        if(k>d) d=k;
+      }
+    }
+    return Math.min(10,d);
+  }
+  function applyPxFormat(cs){
+    if(!cs||!cs.length) return;
+    const precision=pxPrecision(cs), minMove=Math.pow(10,-precision);
+    PXP=precision;                                       // the legend, crosshair, tooltip and hline label read this, so they cannot drift from the axis
+    const fmt={priceFormat:{type:'price',precision,minMove}};
+    [candle,ema9,ema13,ema21,ema50,ema200,patU,patD].forEach(sr=>{ if(sr) sr.applyOptions(fmt); });
+  }
+  const vol=chart.addHistogramSeries({priceScaleId:'vol',priceLineVisible:false,lastValueVisible:false,base:0});
+  chart.priceScale('vol').applyOptions({scaleMargins:{top:0.82, bottom:0.0}});
+  const ribbon=chart.addHistogramSeries({priceScaleId:'inmask',priceLineVisible:false,lastValueVisible:false,base:0});
+  chart.priceScale('inmask').applyOptions({scaleMargins:{top:0.97, bottom:0}});
+  // a move shows its % label ONLY when it's resolvable at the current timeframe — its start & end fall on DIFFERENT bars
+  // (spans >1 bar), so you can actually SEE the move. On 1D most moves are intraday (start+end same day) → hidden; on 5m
+  // they span many bars → shown. allMoveMk is rebuilt per-timeframe in render(); the checkbox just toggles it on/off.
+  let allMoveMk=[], gapMkAll=[], showMoves=false;  // Nate: default moves OFF so the chart opens clean — tick "show moves" to bring the 5%+ move markers back
+  function updateMarkers(){
+    candle.setMarkers(showMoves ? [...allMoveMk,...gapMkAll].sort((a,b)=>a.time-b.time) : []);   // checkbox off -> clean candles
+  }
+
+  // ---- legend ----
+  const legend=document.getElementById('legend');
+  function tfName(){ const m={1:'1m',3:'3m',5:'5m',15:'15m',30:'30m',60:'1h',120:'2h',240:'4h',1440:'1D'}; return m[activeTF]||''; }
+  function setLegend(o,h,l,c,e9,e13,e21,e50,e200){
+    const cc=(c>=o)?'#26a69a':'#ef5350';
+    const ev=(lbl,v,col)=> v==null?'':' <span style="color:'+col+'">'+lbl+' '+px(v)+'</span>';
+    legend.innerHTML='<b style="color:#eaecef">'+(data.sym||'')+'</b> <span style="color:'+MUT+'">'+tfName()+'</span>&nbsp;&nbsp;'
+      +'<span style="color:'+MUT+'">O</span> <span style="color:'+cc+'">'+px(o)+'</span> '
+      +'<span style="color:'+MUT+'">H</span> <span style="color:'+cc+'">'+px(h)+'</span> '
+      +'<span style="color:'+MUT+'">L</span> <span style="color:'+cc+'">'+px(l)+'</span> '
+      +'<span style="color:'+MUT+'">C</span> <span style="color:'+cc+'">'+px(c)+'</span>'
+      +'<br><span style="font-size:11px">'+ev('EMA9',e9,EMACOL[9])+ev('13',e13,EMACOL[13])+ev('21',e21,EMACOL[21])+ev('50',e50,EMACOL[50])+ev('200',e200,EMACOL[200])+'</span>';
+  }
+  const lastVal=a=>{ for(let i=a.length-1;i>=0;i--) if(a[i]!=null)return a[i]; return null; };
+
+  // ---- Lifer pattern overlay -------------------------------------------------------------------
+  // PAT is {type,status,u:[anchorTimeSec,price,slopePerBar],d:[...],t0,brkT}. The slope is per BAR of the
+  // timeframe the pattern was DETECTED on, so the lines are only drawn when the chart is on that timeframe —
+  // redrawing them on another timeframe would silently rescale the slope and show a line that never existed.
+  let PAT=PAT0, PATTF=PATTF0;
+  function drawPattern(cs){
+    if(!PAT || PATTF!==activeTF || !cs.length){ patU.setData([]); patD.setData([]); return; }
+    const span=activeTF*60;
+    const SEC=t=>t>1e11?Math.floor(t/1000):t;                    // the engine stamps epoch MILLISECONDS; the chart works in SECONDS
+    const t0p=SEC(PAT.t0);
+    // each line starts at ITS OWN first pivot, not the shared earliest one
+    const seg=(L)=>{ const [ta,p0,m]=L; const t0=SEC(ta); const out=[];
+      for(const c of cs){ if(c.time < t0) continue; out.push({time:c.time, value:p0 + m*((c.time-t0)/span)}); }
+      return out; };
+    const u=seg(PAT.u), d=seg(PAT.d);
+    patU.setData(u.length>1?u:[]); patD.setData(d.length>1?d:[]);
+  }
+
+  // ---- render the active timeframe (moves are already computed into MV) ----
+  const MAX_BARS=9000;
+  function render(fit){
+    const keepRange = (fit===false) ? chart.timeScale().getVisibleRange() : null;   // param/TF change: preserve the user's view (by TIME, stable across re-bucketing) instead of zooming out
+    let cs=aggregate(activeTF);
+    if(cs.length>MAX_BARS) cs=cs.slice(cs.length-MAX_BARS);
+    const wStart=cs[0].time, closes=cs.map(c=>c.close); CS=cs;
+    applyPxFormat(cs);                                   // this asset's own quoting precision, before any data goes in
+    candle.setData(cs.map(c=>({time:c.time,open:c.open,high:c.high,low:c.low,close:c.close})));
+    const e9=ema(closes,9), e13=ema(closes,13), e21=ema(closes,21), e50=ema(closes,50), e200=ema(closes,200); E={e9,e13,e21,e50,e200};
+    const mkLine=arr=>{ const o=[]; for(let i=0;i<cs.length;i++) if(arr[i]!=null)o.push({time:cs[i].time,value:arr[i]}); return o; };
+    ema9.setData(mkLine(e9)); ema13.setData(mkLine(e13)); ema21.setData(mkLine(e21)); ema50.setData(mkLine(e50)); ema200.setData(mkLine(e200));
+    drawPattern(cs);
+    vol.setData(cs.map(c=>({time:c.time,value:c.vol,color:c.close>=c.open?'rgba(38,166,154,0.45)':'rgba(239,83,80,0.45)'})));
+    ribbon.setData(cs.map(c=>({time:c.time,value:c.inFrac>=0.5?1:0,color:c.inFrac>=0.5?'rgba(0,200,120,0.42)':'rgba(0,0,0,0)'})));
+    const span=activeTF*60, snap=t=>Math.floor(t/span)*span;
+    // a move's % shows ONLY if it spans >1 bar of the current timeframe (start & end snap to DIFFERENT bars = visibly resolvable);
+    // an intraday move collapses into one daily candle → hidden on 1D, shown on 5m. (Nate: "post the percent for moves you can see")
+    allMoveMk=MV.legs.filter(lg=>snap(lg.t1)>=wStart && snap(lg.t1)!==snap(lg.t0)).map(lg=>({time:snap(lg.t1),position:lg.pct>=0?'aboveBar':'belowBar',color:lg.pct>=0?'#2962ff':'#ef5350',shape:lg.pct>=0?'arrowUp':'arrowDown',text:(lg.pct>=0?'+':'')+(Math.abs(lg.pct)>=10?Math.round(lg.pct):lg.pct.toFixed(1))+'%'}));
+    gapMkAll=MV.gaps.filter(g=>snap(g[0])>=wStart&&g[2]>=14).map(g=>({time:snap(g[0]),position:'belowBar',color:'#787b86',shape:'circle',text:'no move '+Math.round(g[2])+'d'}));
+    updateMarkers();
+    chart.timeScale().applyOptions({timeVisible:activeTF<1440});
+    const c=cs[cs.length-1]; if(c) setLegend(c.open,c.high,c.low,c.close,lastVal(e9),lastVal(e13),lastVal(e21),lastVal(e50),lastVal(e200));
+    if(typeof renderDetail==='function') renderDetail(ROW);   // refresh detail stats from the live MV (total / in-move% / avg gap / it's-moving track move size + pullback)
+    if(fit!==false) chart.timeScale().fitContent();   // first paint / asset-open fits to the full range
+    else if(keepRange){ try{ chart.timeScale().setVisibleRange(keepRange); }catch(e){} }   // TF / move-size / pullback change + live ticks: keep the user's current view
+  }
+
+  // ---- per-asset data line: price, 15m/1h/1d/1w %, 24h high / low / volume (off the candles; updates live) ----
+  const SIZES=(q.get('thr')||'').split(',').map(Number).filter(x=>x>0);     // the class's move-size ladder (passed from the table)
+  if(!SIZES.length) SIZES.push(5,6,7,8,9,10,11,12,15,20);                   // lab fallback = crypto ladder
+  const lastT=()=>c5[c5.length-1][0], lastC=()=>c5[c5.length-1][4];
+  function closeAgo(secs){ const target=lastT()-secs; if(c5[0][0]>target) return null; for(let i=c5.length-1;i>=0;i--){ if(c5[i][0]<=target) return c5[i][4]; } return null; }   // null = history doesn't reach back that far (short-listed asset)
+  function pctAgo(mins){ const now=lastC(), then=closeAgo(mins*60); return (then!=null&&then>0)?((now-then)/then*100):null; }
+  function win24(){ const cut=lastT()-86400; let hi=-Infinity,lo=Infinity,v=0; for(let i=c5.length-1;i>=0&&c5[i][0]>=cut;i--){ if(c5[i][2]>hi)hi=c5[i][2]; if(c5[i][3]<lo)lo=c5[i][3]; v+=c5[i][5]||0; } return {hi,lo,v}; }
+  function fmtVol(v){ if(v>=1e9)return (v/1e9).toFixed(2)+'B'; if(v>=1e6)return (v/1e6).toFixed(2)+'M'; if(v>=1e3)return (v/1e3).toFixed(1)+'K'; return ''+Math.round(v); }
+  function pctSpan(p){ if(p==null) return '<span style="color:#787b86">—</span>'; return '<span style="color:'+(p>=0?'#26a69a':'#ef5350')+'">'+(p>=0?'+':'')+p.toFixed(2)+'%</span>'; }
+  function renderStats(){
+    const el=document.getElementById('stats'); if(!el) return; const {hi,lo,v}=win24();
+    el.innerHTML='<b style="color:#eaecef">$'+px(lastC())+'</b>&nbsp;&nbsp;'
+      +'<span class="lbl">15m</span> '+pctSpan(pctAgo(15))+' &nbsp;<span class="lbl">1h</span> '+pctSpan(pctAgo(60))
+      +' &nbsp;<span class="lbl">1d</span> '+pctSpan(pctAgo(1440))+' &nbsp;<span class="lbl">1w</span> '+pctSpan(pctAgo(10080))
+      +' &nbsp;&middot;&nbsp; <span class="lbl">24h H</span> $'+px(hi)+' &nbsp;<span class="lbl">L</span> $'+px(lo)
+      +' &nbsp;<span class="lbl">24h Vol</span> '+fmtVol(v);
+  }
+
+  // ---- header + buttons ----
+  // Nate, 2026-09-26: "remove move size and pullback filter from the chart. thats not relevant for this tab." --
+  // Zones is about range extremes/flip zones, not the dual-gate move-counting system those two controls drive.
+  // Scoped to cls==='zones' only -- every other tab's chart (the move-counting ones this WAS built for) keeps both,
+  // unchanged, since that's genuinely what they're for and nothing was said about removing it there.
+  const ONZONES=q.get('cls')==='zones';
+  bar.innerHTML='<b>'+(data.sym||'')+'</b>'
+    +'<span class="pill b" id="p-moves"></span><span class="pill g" id="p-in"></span><span class="pill r" id="p-out"></span>'
+    +'<span class="br"></span><span id="stats"></span>'
+    +(ONZONES?'':'<span class="br"></span>'
+    +'<span class="lbl">Pullback filter</span><span class="seg" id="pfs"></span>'
+    +'<span class="br"></span>'
+    +'<span class="lbl">Move size</span><span class="seg" id="bases"></span>')
+    +'<span style="width:14px"></span><span class="lbl">Timeframe</span><span class="seg" id="tfs"></span>'
+    +'<label class="note" style="margin-left:12px;cursor:pointer;display:inline-flex;align-items:center;gap:5px;text-transform:none"><input type="checkbox" id="showmoves" style="cursor:pointer"> show moves</label>'
+    +'<button id="shotc" style="margin-left:12px;padding:3px 11px;font-size:12px;background:var(--panel);color:#aeb4c0;border:1px solid var(--border);border-radius:6px;cursor:pointer">📷 Screenshot</button>'
+    +'<span class="br"></span>'
+    +(ONZONES?'<span class="note">blue = counted moves &middot; green strip = in-move time</span>'
+             :'<span class="note">blue = counted moves &middot; green strip = in-move time &middot; pullback filter = how deep a pullback you hold a move through (25% twitchy &rarr; 90% hold through nearly a full round trip)</span>');
+  function updateHeader(){
+    document.getElementById('p-moves').textContent=MV.moveCount+' moves';
+    document.getElementById('p-in').textContent='in '+MV.inPct+'%';
+    document.getElementById('p-out').textContent='not in '+(100-MV.inPct)+'%';
+  }
+  function group(id,items,isOn,onPick){ const wrap=document.getElementById(id); if(!wrap) return;   // pfs/bases don't exist on the Zones chart (removed above) -- their group() calls below are now no-ops there, not errors
+    items.forEach(([lbl,val])=>{ const b=document.createElement('span'); b.className='tf'+(isOn(val)?' on':''); b.textContent=lbl;
+      b.onclick=()=>{ [...wrap.children].forEach(x=>x.classList.remove('on')); b.classList.add('on'); onPick(val); }; wrap.appendChild(b); }); }
+  group('pfs',[['25%',25],['50%',50],['75%',75],['90%',90]],v=>v===activePF,v=>{ activePF=v; computeMoves(); updateHeader(); render(false); });
+  group('bases',SIZES.map(t=>[t+'%',t]),v=>v===activeBase,v=>{ activeBase=v; computeMoves(); updateHeader(); render(false); });
+  group('tfs',[['1m',1],['3m',3],['5m',5],['15m',15],['30m',30],['1h',60],['2h',120],['4h',240],['1D',1440]],v=>v===activeTF,v=>{ activeTF=v; render(false); });   // 30m and 2h added so EVERY Lifer timeframe can actually be viewed here; 1m and 3m added 2026-10-03 when they joined LIFER_TFS -- without them a Volume-tab row sorted on 1m opened a chart with no timeframe lit and no way back to it
+
+  computeMoves(); updateHeader(); render(); renderStats();
+  { const smv=document.getElementById('showmoves'); if(smv) smv.onchange=()=>{ showMoves=smv.checked; updateMarkers(); }; }
+  function renderDetail(row){
+    const el=document.getElementById('detail'); if(!el) return;
+    if(!row){ el.innerHTML=''; return; }
+    const P=row.pf&&row.pf[activePF], counts=(P&&P.counts)||row.counts||[], maxc=Math.max(1,...counts);
+    const bars=SIZES.map((t,i)=>'<div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:3px"><div style="width:100%;background:#2962ff;border-radius:3px 3px 0 0;height:'+Math.max(3,Math.round(72*(counts[i]||0)/maxc))+'px"></div><span style="font-size:10px;color:var(--mut)">&ge;'+t+'</span></div>').join('');
+    // live from the chart's CURRENT moves (MV) so these update when you change move size or pullback filter
+    const tot=MV.moveCount||0, inPct=MV.inPct||0;
+    const gd=(MV.gaps&&MV.gaps.length)?(MV.gaps.reduce((s,g)=>s+(g[2]||0),0)/MV.gaps.length):0;
+    const gp=(MV.gaps&&MV.gaps.length)?(gd>=1?gd.toFixed(1)+'d':(gd*24).toFixed(1)+'h'):'—';
+    const lg=(MV.legs&&MV.legs.length)?MV.legs[MV.legs.length-1]:null, lh=lg?(lg.t1-lg.t0)/3600:0;
+    const mvTxt=lg?('<span style="color:'+(lg.pct>=0?'#26a69a':'#ef5350')+'">'+(lg.pct>=0?'▲ +':'▼ −')+Math.abs(Math.round(lg.pct))+'%</span> <span style="color:var(--mut)">· '+(lh<24?lh.toFixed(1)+'h':(lh/24).toFixed(1)+'d')+'</span>'):'<span style="color:var(--mut)">—</span>';
+    const mc=row.mcRank!=null?('#'+row.mcRank+(row.mcMove?' <span style="color:'+(row.mcMove>0?'#26a69a':'#ef5350')+';font-size:12px">'+(row.mcMove>0?'▲':'▼')+Math.abs(row.mcMove)+'</span>':'')):'—';
+    const r7=(row.range7!=null&&row.lo7!=null)?('$'+px(row.lo7)+' – $'+px(row.hi7)+' <span style="color:var(--mut);font-size:12px">'+row.range7+'%</span>'):'—';
+    const card=(k,v)=>'<div class="dcard"><div class="k">'+k+'</div><div class="v">'+v+'</div></div>';
+    const park=(t,d)=>'<div class="pcard"><div class="t">'+t+'</div><div class="d">'+d+'</div></div>';
+    el.innerHTML='<div class="dsec">Move history · since '+(row.start?((new Date(row.start).getMonth()+1)+'/'+String(new Date(row.start).getFullYear()).slice(2)):'—')+'</div>'
+      +'<div style="background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:13px;margin-bottom:16px">'
+      +'<div style="font-size:11px;color:var(--mut);margin-bottom:8px">moves by size — count over the year (at the current pullback filter)</div>'
+      +'<div style="display:flex;align-items:flex-end;gap:5px;height:80px">'+bars+'</div>'
+      +'<div class="dgrid" style="margin-top:14px">'
+      +card('total moves &ge;'+activeBase+'%',tot.toLocaleString())
+      +card('% of time in a move',inPct+'%')
+      +card('avg gap between',gp)
+      +card("it's moving",mvTxt)
+      +card('mkt-cap rank',mc)
+      +card('7-day range',r7)
+      +'</div></div>'
+      +'<div class="dsec">By trading style · parked — defined later from the Trend Solution</div>'
+      +'<div class="dgrid">'
+      +park('Scalps','small, fast moves — stats to come once the Trend Solution defines what wins.')
+      +park('Swings','medium moves — stats to come once the Trend Solution defines what wins.')
+      +park('Trend riders','big, sustained moves — stats to come once the Trend Solution defines what wins.')
+      +'</div>';
+  }
+
+  // ---- screenshot: lightweight-charts canvas + a baked header line (sym · timeframe · pullback · move size · move count · price) ----
+  const shotc=document.getElementById('shotc');
+  if(shotc) shotc.onclick=()=>{
+    try{
+      const cvs=chart.takeScreenshot(), headH=36, W=cvs.width, H=cvs.height+headH, x=document.createElement('canvas');
+      x.width=W; x.height=H; const g=x.getContext('2d');
+      g.fillStyle='#131722'; g.fillRect(0,0,W,H);
+      g.fillStyle='#b8c0cc'; g.font='600 14px "Segoe UI Variable Text","Segoe UI",-apple-system,Inter,Roboto,Helvetica,Arial,sans-serif'; g.textBaseline='middle';   // same grey as the chart's own text
+      g.fillText((data.sym||'')+'  ·  '+tfName()+(ONZONES?'':'  ·  pullback '+activePF+'%  ·  move '+activeBase+'%')+'  ·  '+MV.moveCount+' moves  ·  $'+px(lastC()), 11, headH/2);
+      g.drawImage(cvs,0,headH);
+      x.toBlob(b=>{ const a=document.createElement('a'); a.download=(data.sym||'chart')+'_moves.png'; a.href=URL.createObjectURL(b); a.click(); });
+    }catch(e){ shotc.textContent='screenshot failed'; shotc.title=String(e&&e.message||e); setTimeout(()=>{ shotc.textContent='📷 Screenshot'; shotc.title=''; },4000); }   // on the button itself: no native dialog
+  };
+
+  // ---- LIVE: tick the chart from Binance's keyless data WS (crypto only, passed as live=1). Updates the forming
+  // 1-minute candle (or appends a new one), then redraws on a ~1.2s throttle that PRESERVES zoom/pan (render(false)). ----
+  if(q.get('live')==='1' && data.sym){
+    let dirty=false, tmr=null;
+    const flush=()=>{ tmr=null; if(!dirty)return; dirty=false; computeMoves(); updateHeader(); render(false); renderStats(); };
+    const onKline=(k)=>{
+      const t=Math.floor(+k.t/1000), o=+k.o,h=+k.h,l=+k.l,c=+k.c,v=+k.v, n=c5.length, L=c5[n-1];
+      if(!isFinite(t)||!isFinite(o)||!isFinite(h)||!isFinite(l)||!isFinite(c)) return;       // ignore a malformed frame — never poison the series
+      if(L && t===L[0]){ L[1]=o;L[2]=h;L[3]=l;L[4]=c;L[5]=(isFinite(v)?v:L[5]); }            // same minute -> update the forming candle
+      else if(!L || t>L[0]){ c5.push([t,o,h,l,c,(isFinite(v)?v:0)]); inFrac5.push(0); }      // new minute -> append
+      else return;
+      dirty=true; if(!tmr) tmr=setTimeout(flush,1200);                                        // throttle the full redraw
+    };
+    let ws=null, retry=null, gotMsg=false, fails=0, ping=null;
+    // PERPS: a perp-routed asset ticks from its contract (Bitget USDT-FUTURES or KuCoin futures), the same one the engine
+    // downloads its candles from; only crypto with no perp route stays on Binance spot.
+    const route = (window.chartAPI && window.chartAPI.perpRoute) ? window.chartAPI.perpRoute(data.sym, q.get('acls')||q.get('cls')||'crypto').catch(()=>null) : Promise.resolve(null);
+    const un=(x,s)=>s===1 ? +x : +((+x)/s).toPrecision(10);
+    const connect=()=>{ route.then(R=>{
+      if(ping){ clearInterval(ping); ping=null; }
+      const wire=()=>{ ws.onclose=()=>{ if(ping){ clearInterval(ping); ping=null; } if(!gotMsg && ++fails>=4) return; if(!retry) retry=setTimeout(()=>{ retry=null; connect(); },5000); };
+                       ws.onerror=()=>{ try{ ws.close(); }catch(e){} }; };
+      if(R && R.v==='bitget'){
+        try{ ws=new WebSocket('wss://ws.bitget.com/v2/ws/public'); }catch(e){ return; }
+        ws.onopen=()=>{ try{ ws.send(JSON.stringify({op:'subscribe', args:[{instType:'USDT-FUTURES', channel:'candle1m', instId:R.p}]})); }catch(e){}
+                        ping=setInterval(()=>{ try{ ws.send('ping'); }catch(e){} },25000); };
+        ws.onmessage=(m)=>{ if(m.data==='pong') return; try{ const j=JSON.parse(m.data); if(!j||j.action!=='update'||!Array.isArray(j.data)) return; gotMsg=true; fails=0;
+          for(const k of j.data.slice().sort((x,y)=>(+x[0])-(+y[0]))) onKline({t:+k[0], o:un(k[1],R.s), h:un(k[2],R.s), l:un(k[3],R.s), c:un(k[4],R.s), v:(+k[5])*R.s}); }catch(e){} };
+        wire(); return;
+      }
+      if(R && R.v==='kucoin'){
+        window.chartAPI.kufToken().then(t=>{
+          if(!t||!t.token){ if(++fails<4 && !retry) retry=setTimeout(()=>{ retry=null; connect(); },5000); return; }
+          try{ ws=new WebSocket(t.endpoint+'?token='+encodeURIComponent(t.token)+'&connectId=chart'+Date.now()); }catch(e){ return; }
+          ws.onopen=()=>{ try{ ws.send(JSON.stringify({id:'s1', type:'subscribe', privateChannel:false, response:true, topic:'/contractMarket/limitCandle:'+R.p+'_1min'})); }catch(e){}
+                          ping=setInterval(()=>{ try{ ws.send(JSON.stringify({id:'p'+Date.now(), type:'ping'})); }catch(e){} }, t.pingInterval||18000); };
+          ws.onmessage=(m)=>{ try{ const j=JSON.parse(m.data); if(!j||j.type!=='message'||!j.data||!Array.isArray(j.data.candles)) return; gotMsg=true; fails=0; const c=j.data.candles;
+            onKline({t:(+c[0])*1000, o:un(c[1],R.s), h:un(c[3],R.s), l:un(c[4],R.s), c:un(c[2],R.s), v:(+c[6])*R.m*R.s}); }catch(e){} };
+          wire();
+        }).catch(()=>{});
+        return;
+      }
+      if(R && R.v==='okx'){
+        try{ ws=new WebSocket('wss://ws.okx.com:8443/ws/v5/business'); }catch(e){ return; }
+        ws.onopen=()=>{ try{ ws.send(JSON.stringify({op:'subscribe', args:[{channel:'candle1m', instId:R.p}]})); }catch(e){}
+                        ping=setInterval(()=>{ try{ ws.send('ping'); }catch(e){} },25000); };
+        ws.onmessage=(m)=>{ if(m.data==='pong') return; try{ const j=JSON.parse(m.data); if(!j||!j.arg||!Array.isArray(j.data)) return; gotMsg=true; fails=0;
+          for(const k of j.data.slice().sort((x,y)=>(+x[0])-(+y[0]))) onKline({t:+k[0], o:un(k[1],R.s), h:un(k[2],R.s), l:un(k[3],R.s), c:un(k[4],R.s), v:(+k[6])*R.s}); }catch(e){} };
+        wire(); return;
+      }
+      if(R && R.v==='mexc'){
+        try{ ws=new WebSocket('wss://contract.mexc.com/edge'); }catch(e){ return; }
+        ws.onopen=()=>{ try{ ws.send(JSON.stringify({method:'sub.kline', param:{symbol:R.p, interval:'Min1'}})); }catch(e){}
+                        ping=setInterval(()=>{ try{ ws.send(JSON.stringify({method:'ping'})); }catch(e){} },15000); };
+        ws.onmessage=(m)=>{ try{ const j=JSON.parse(m.data); if(!j||j.channel!=='push.kline'||!j.data) return; gotMsg=true; fails=0; const k=j.data;
+          onKline({t:(+k.t)*1000, o:un(k.o,R.s), h:un(k.h,R.s), l:un(k.l,R.s), c:un(k.c,R.s), v:(+k.q)*R.m*R.s}); }catch(e){} };
+        wire(); return;
+      }
+      if((q.get('acls')||q.get('cls')||'crypto')!=='crypto') return;                // no perp for this stock / metal / index: no live stream
+      try{ ws=new WebSocket('wss://data-stream.binance.vision/ws/'+data.sym.toLowerCase()+'usdt@kline_1m'); }catch(e){ return; }
+      ws.onmessage=(m)=>{ gotMsg=true; fails=0; try{ const j=JSON.parse(m.data); if(j&&j.k) onKline(j.k); }catch(e){} };
+      ws.onclose=()=>{ if(!gotMsg && ++fails>=4) return; if(!retry) retry=setTimeout(()=>{ retry=null; connect(); },5000); };   // auto-reconnect; give up after 4 dead connects (e.g. a coin with no Binance USDT pair)
+      ws.onerror=()=>{ try{ ws.close(); }catch(e){} };
+    }); };
+    connect();
+    window.addEventListener('beforeunload',()=>{ try{ if(ws)ws.close(); }catch(e){} });
+  }
+
+  // ---- price float + live legend on hover + per-move hover ----
+  const tip=document.getElementById('tip'), wrap=document.getElementById('price'), pf=document.getElementById('pricefloat');
+  chart.subscribeCrosshairMove(param=>{
+    if(!param.point||param.time==null){ pf.style.display='none'; tip.style.display='none';
+      const c=CS[CS.length-1]; if(c) setLegend(c.open,c.high,c.low,c.close,lastVal(E.e9),lastVal(E.e13),lastVal(E.e21),lastVal(E.e50),lastVal(E.e200)); return; }
+    const cd=param.seriesData.get(candle);
+    if(cd){ const at=(sr,a)=>{ const d2=param.seriesData.get(sr); return d2?d2.value:lastVal(a); }; setLegend(cd.open,cd.high,cd.low,cd.close,at(ema9,E.e9),at(ema13,E.e13),at(ema21,E.e21),at(ema50,E.e50),at(ema200,E.e200)); }
+    const pr=candle.coordinateToPrice(param.point.y);
+    if(pr!=null&&isFinite(pr)){ pf.textContent='$'+px(pr)+'  ·  '+tzStamp(param.time); pf.style.display='block'; pf.style.left=(param.point.x+14)+'px'; pf.style.top=Math.max(2,param.point.y-28)+'px'; } else pf.style.display='none';
+    const T=param.time; let f=null; for(const lg of MV.legs){ if(T>=lg.t0&&T<=lg.t1){ f=lg; break; } }
+    if(!f){ tip.style.display='none'; return; }
+    const dh=(f.t1-f.t0)/3600, dur=dh<24?dh.toFixed(1)+'h':(dh/24).toFixed(1)+'d';
+    tip.innerHTML=(f.pct>=0?'+':'')+f.pct.toFixed(1)+'% &middot; '+dur+'<br>$'+px(f.v0)+' &rarr; $'+px(f.v1)+'<br>'+tzMD(f.t0)+' &rarr; '+tzMD(f.t1);   // ALWAYS local: a move leg is an instant off the 5m series (retraceZig over c5), not a daily bar identity, so the tzDate exception must not reach it -- on 1D it printed a date a day ahead of his clock on 12.5% of legs
+    tip.style.display='block';
+    let x=param.point.x+16, y=param.point.y+16; if(x>wrap.clientWidth-170)x=param.point.x-160;
+    tip.style.left=x+'px'; tip.style.top=y+'px';
+  });
+  // ---- drawing tools: overlay canvas; shapes stored as time+price anchors so they stick to the candles; saved per symbol ----
+  const dcv=document.getElementById('draw'), dctx=dcv.getContext('2d'), dtbar=document.getElementById('dtools'), DKEY='draw_'+(data.sym||'?'), DCOL='#e8b339';
+  let drawings=[]; try{ drawings=JSON.parse(localStorage.getItem(DKEY)||'[]')||[]; }catch(e){ drawings=[]; }
+  let dtool='cursor', pend=null;
+  const saveD=()=>{ try{ localStorage.setItem(DKEY,JSON.stringify(drawings)); }catch(e){} };
+  // ZONES: read-only, NOT part of `drawings` -- not user-editable, not saved to localStorage, not touched by the
+  // clear-all button. ms->sec to match candle.setData's time unit (main.js's get-candles comment: "ts ms->sec").
+  // Extreme = orange, flip = blue, dashed while invalidated -- same convention as the standalone research viz.
+  // BUG FIX (Nate, 2026-09-26, caught live -- diagnosed by patching fillRect and logging x1/y1/x2/y2 for every
+  // zone: y (price) coordinates always resolved fine, x (time) NEVER did, for every single zone on every asset).
+  // Root cause: zone timestamps come from a SEPARATE fetch (Polygon/Binance daily klines, the Zones detection
+  // pipeline) than the chart's own candles (aggregated here from this app's internal minute-candle store) -- their
+  // daily bar boundaries don't land on the exact same millisecond. lightweight-charts' time axis is BAR-INDEXED:
+  // timeToCoordinate() needs an actual plotted point at that exact time, unlike the price axis (which extrapolates
+  // fine for any number). Snapping each zone timestamp to its nearest REAL candle in the currently-loaded series
+  // fixes this generally, regardless of which two data sources happen to disagree by how many hours.
+  const snapT=(t)=>{
+    if(!CS.length) return t;
+    let lo=0, hi=CS.length-1;
+    if(t<=CS[0].time) return CS[0].time;
+    if(t>=CS[hi].time) return CS[hi].time;
+    while(lo<hi-1){ const mid=(lo+hi)>>1; if(CS[mid].time<=t) lo=mid; else hi=mid; }
+    return (t-CS[lo].time <= CS[hi].time-t) ? CS[lo].time : CS[hi].time;
+  };
+  const zoneShapes=(ZONES0||[]).map(z=>({
+    a:{t:snapT(Math.floor(z.birthTime/1000)), p:z.top}, b:{t:snapT(Math.floor((z.deadAt||Date.now())/1000)), p:z.bottom},
+    col: z.type==='extreme' ? '#f3a64b' : '#3b9dff', dead: z.state==='invalidated',
+    label:(z.type==='extreme'?('EXT '+z.side):'FLIP')+' '+((z.top+z.bottom)/2).toPrecision(6).replace(/\.?0+$/,'')+' ('+z.touchCount+'t) ['+z.state+']'
+  }));
+  // DEFAULT VIEW SHOWS BOTH EXTREMES (Nate, 2026-09-26: "when the chart opens both extremes need to be viewable
+  // by default on the chart. So i can see where its at in relation both extremes. and how big the range is.")
+  // BUG FIX (Nate, 2026-09-26, after seeing it live: charts were opening zoomed to 4-7 candles with no box in
+  // view at all): the first version of this anchored the view to the EXTREME ZONE'S OWN birth time (when its
+  // qualifying touches happened) -- but a level can legitimately get its 2nd touch just a few days ago, which
+  // collapsed the whole view to that narrow window and showed NEITHER extreme, since "the range" itself was never
+  // in frame. Extremes are the 90-day WINDOW's own high/low by definition (proved earlier this session, see the
+  // reverted extreme-demotion attempt) -- so showing the ACTUAL window is what guarantees both are visible, not
+  // guessing from a zone's birth. ZWIN0 (start/end of that real 90-day window) is now passed through from the
+  // Zones tab's own published data, not reconstructed from zone objects.
+  if(ZWIN0){
+    const from=Math.floor(ZWIN0.start/1000), to=Math.floor(ZWIN0.end/1000);
+    const pad=Math.round((to-from)*0.04)||86400;   // a little breathing room on both sides
+    try{ chart.timeScale().setVisibleRange({from:from-pad, to:to+pad}); }catch(e){}
+  }
+  const cX=t=>chart.timeScale().timeToCoordinate(t), cY=p=>candle.priceToCoordinate(p), cT=x=>chart.timeScale().coordinateToTime(x), cP=y=>candle.coordinateToPrice(y);
+  const dseg=(x1,y1,x2,y2)=>{ dctx.beginPath(); dctx.moveTo(x1,y1); dctx.lineTo(x2,y2); dctx.stroke(); };
+  function drawAll(){
+    if(!dcv.width||!dcv.height) return; dctx.clearRect(0,0,dcv.width,dcv.height);
+    const W=dcv.width, list=pend?drawings.concat([pend]):drawings;
+    dctx.lineWidth=1.6; dctx.font='10px "Segoe UI Variable Text","Segoe UI",-apple-system,Inter,Roboto,Helvetica,Arial,sans-serif';
+    for(const z of zoneShapes){
+      const x1=cX(z.a.t),y1=cY(z.a.p),x2=cX(z.b.t),y2=cY(z.b.p); if(x1==null||y1==null||x2==null||y2==null)continue;
+      dctx.setLineDash(z.dead?[5,4]:[]); dctx.strokeStyle=z.dead?'#666':z.col;
+      dctx.fillStyle=z.dead?'rgba(120,120,120,0.10)':z.col+'33';
+      dctx.fillRect(x1,y1,x2-x1,y2-y1); dctx.strokeRect(x1,y1,x2-x1,y2-y1); dctx.setLineDash([]);
+      dctx.fillStyle=z.dead?'#888':z.col; dctx.fillText(z.label,x1+3,(y1<12?y1+11:y1-3));
+    }
+    if(FIB0){                                                            // 882: 0 at the leg's END, 1.0 at its ORIGIN, with .786/.882/.941 between -- the levels the row is judged on
+      const lvlAt=f=>FIB0.z+(FIB0.a-FIB0.z)*f;                           // same formula the engine used, so these ARE the row's levels
+      const FL=[[lvlAt(0),'0','#7f8c9a'],[lvlAt(0.236),'0.236','#5a6573'],[lvlAt(0.382),'0.382','#5a6573'],[lvlAt(0.5),'0.5','#5a6573'],
+                [lvlAt(0.618),'0.618','#5a6573'],[FIB0.l786,'0.786','#4ad07a'],[FIB0.l882,'0.882','#ffb02e'],
+                [FIB0.l941,'0.941','#ef5350'],[lvlAt(1),'1','#7f8c9a']];
+      dctx.setLineDash([]);
+      for(const [p,lbl,col] of FL){ const y=cY(p); if(y==null) continue;
+        dctx.strokeStyle=col.trim(); dctx.lineWidth=(lbl==='0.882')?1.8:1.1;
+        dseg(0,y,W,y);
+        dctx.fillStyle=col.trim(); dctx.fillText(lbl+'  '+(+p).toPrecision(6).replace(/(\.\d*?)0+$/,'$1').replace(/\.$/,''), 4, y-3); }
+      dctx.lineWidth=1.6;
+    }
+    for(const d of list){ dctx.strokeStyle=DCOL;
+      if(d.type==='hline'){ const y=cY(d.p); if(y==null)continue; dseg(0,y,W,y); dctx.fillStyle=DCOL; dctx.fillText('$'+px(d.p),4,y-3); }
+      else { const x1=cX(d.a.t),y1=cY(d.a.p),x2=cX(d.b.t),y2=cY(d.b.p); if(x1==null||y1==null||x2==null||y2==null)continue;
+        if(d.type==='trend'){ dseg(x1,y1,x2,y2); }
+        else if(d.type==='rect'){ dctx.fillStyle=DCOL+'22'; dctx.fillRect(x1,y1,x2-x1,y2-y1); dctx.strokeRect(x1,y1,x2-x1,y2-y1); } }
+    }
+  }
+  function setDTool(id){ dtool=id; pend=null; dcv.classList.toggle('off',id==='cursor'); dtbar.querySelectorAll('.dtool').forEach(b=>b.classList.toggle('on',b.dataset.id===id)); }
+  [['cursor','⌖','cursor — pan & zoom'],['hline','—','horizontal line'],['trend','╱','trend / diagonal line'],['rect','▭','rectangle'],['clear','🗑','delete all drawings']].forEach(([id,ic,tip])=>{
+    const b=document.createElement('div'); b.className='dtool'+(id==='cursor'?' on':''); b.textContent=ic; b.title=tip; b.dataset.id=id;
+    b.onclick=()=>{ if(id==='clear'){                           // a second click within 5 s deletes -- no native dialog
+        if(!drawings.length) return;
+        if(!b._arm){ b._arm=true; b.textContent='✓?'; b.title='click again to delete all drawings on '+(data.sym||''); setTimeout(()=>{ b._arm=false; b.textContent=ic; b.title=tip; },5000); return; }
+        b._arm=false; b.textContent=ic; b.title=tip; drawings=[]; pend=null; saveD(); drawAll(); return; }
+      setDTool(id); drawAll(); };
+    dtbar.appendChild(b);
+  });
+  const evXY=e=>{ const r=dcv.getBoundingClientRect(); return [e.clientX-r.left,e.clientY-r.top]; };
+  dcv.addEventListener('mousedown',e=>{ if(dtool==='cursor')return; const [x,y]=evXY(e),t=cT(x),p=cP(y); if(t==null||p==null)return;
+    if(dtool==='hline'){ drawings.push({type:'hline',p}); saveD(); setDTool('cursor'); drawAll(); return; }
+    if(!pend) pend={type:dtool,a:{t,p},b:{t,p}}; else { pend.b={t,p}; drawings.push(pend); pend=null; saveD(); setDTool('cursor'); }
+    drawAll();
+  });
+  dcv.addEventListener('mousemove',e=>{ if(!pend)return; const [x,y]=evXY(e),t=cT(x),p=cP(y); if(t!=null&&p!=null){ pend.b={t,p}; drawAll(); } });
+  chart.timeScale().subscribeVisibleLogicalRangeChange(()=>drawAll());
+  const fitCv=()=>{ const r=dcv.getBoundingClientRect(); if(r.width>0){ dcv.width=Math.round(r.width); dcv.height=Math.round(r.height); } drawAll(); };
+  try{ new ResizeObserver(()=>fitCv()).observe(document.getElementById('price')); }catch(e){}
+  fitCv();
+  // Nate, 2026-09-26: "when I resize the chart the zones dont move w/ the chart." Two real causes, one fix. The
+  // overlay is a plain canvas that only redraws when something calls drawAll(), and the two things that called it
+  // were not enough: (1) the chart is created with autoSize:true, so the LIBRARY re-lays-out on its own schedule --
+  // our ResizeObserver can fire and draw while the chart is still reporting the OLD size, leaving boxes at stale
+  // coordinates with nothing scheduled to correct them; (2) NOTHING fires when the PRICE axis rescales (dragging
+  // the price scale, or autoscale after a live tick), because subscribeVisibleLogicalRangeChange is time-axis only.
+  // Rather than guess which events to hook, watch the MAPPING itself: sample what the two axes map the canvas
+  // corners to, and redraw whenever that changes. Catches resize, pan, zoom, price-drag and autoscale alike.
+  let mapSig0='';
+  const mapSig=()=>{ let p0,p1,t0,t1; try{ p0=cP(0); p1=cP(dcv.height); t0=cT(0); t1=cT(dcv.width); }catch(e){}
+    return dcv.width+'x'+dcv.height+'|'+p0+'|'+p1+'|'+t0+'|'+t1; };
+  const mapTick=()=>{ const s=mapSig(); if(s!==mapSig0){ mapSig0=s; drawAll(); } requestAnimationFrame(mapTick); };
+  requestAnimationFrame(mapTick);
+})();
+</script>
+</body>
+</html>

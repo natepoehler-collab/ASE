@@ -1,0 +1,9 @@
+{
+  "name": "asset-selection-engine",
+  "version": "1.30.40",
+  "description": "Asset Selection Engine — standalone Windows desktop app (self-updating)",
+  "main": "main.js",
+  "dependencies": {
+    "dukascopy-node": "^1.46.4"
+  }
+}

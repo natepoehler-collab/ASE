@@ -1,0 +1,2006 @@
+{
+ "metal": [
+  {
+   "sym": "XAUUSD",
+   "yubit": "XAUUSD.s",
+   "cat": "metal",
+   "desc": "Gold (one troy ounce) vs USD"
+  },
+  {
+   "sym": "XAGUSD",
+   "yubit": "XAGUSD.s",
+   "cat": "metal",
+   "desc": "Silver (one troy ounce) vs USD"
+  },
+  {
+   "sym": "XCUUSD",
+   "yubit": "XCUUSD.s",
+   "cat": "metal",
+   "desc": "High Grade Copper vs USD"
+  },
+  {
+   "sym": "XPDUSD",
+   "yubit": "XPDUSD.s",
+   "cat": "metal",
+   "desc": "Palladium (one troy ounce) vs USD"
+  },
+  {
+   "sym": "XPTUSD",
+   "yubit": "XPTUSD.s",
+   "cat": "metal",
+   "desc": "Platinum (one troy ounce) vs USD"
+  },
+  {
+   "sym": "GAUCNH",
+   "yubit": "GAUCNH.s",
+   "cat": "metal",
+   "desc": "Gold (one troy ounce) vs offshore yuan — Dukascopy xaucnh"
+  }
+ ],
+ "forex": [
+  {
+   "sym": "USDJPY",
+   "yubit": "USDJPY.s",
+   "cat": "forex",
+   "desc": "US Dollar vs Japanese Yen"
+  },
+  {
+   "sym": "GBPUSD",
+   "yubit": "GBPUSD.s",
+   "cat": "forex",
+   "desc": "Great Britain Pound vs US Dollar"
+  },
+  {
+   "sym": "GBPNZD",
+   "yubit": "GBPNZD.s",
+   "cat": "forex",
+   "desc": "Great Britain Pound vs New Zealand Dollar"
+  },
+  {
+   "sym": "EURAUD",
+   "yubit": "EURAUD.s",
+   "cat": "forex",
+   "desc": "Euro vs Australian Dollar"
+  },
+  {
+   "sym": "EURCAD",
+   "yubit": "EURCAD.s",
+   "cat": "forex",
+   "desc": "Euro vs Canadian Dollar"
+  },
+  {
+   "sym": "USDCNH",
+   "yubit": "USDCNH.s",
+   "cat": "forex",
+   "desc": "US Dollar vs CNH"
+  },
+  {
+   "sym": "GBPCHF",
+   "yubit": "GBPCHF.s",
+   "cat": "forex",
+   "desc": "Great Britain Pound vs Swiss Franc"
+  },
+  {
+   "sym": "CADJPY",
+   "yubit": "CADJPY.s",
+   "cat": "forex",
+   "desc": "Canadian Dollar vs Japanese Yen"
+  },
+  {
+   "sym": "EURUSD",
+   "yubit": "EURUSD.s",
+   "cat": "forex",
+   "desc": "Euro vs US Dollar"
+  },
+  {
+   "sym": "EURGBP",
+   "yubit": "EURGBP.s",
+   "cat": "forex",
+   "desc": "Euro vs Great Britain Pound "
+  },
+  {
+   "sym": "CADCHF",
+   "yubit": "CADCHF.s",
+   "cat": "forex",
+   "desc": "Canadian Dollar vs Swiss Franc"
+  },
+  {
+   "sym": "AUDJPY",
+   "yubit": "AUDJPY.s",
+   "cat": "forex",
+   "desc": "Australian Dollar vs Japanese Yen"
+  },
+  {
+   "sym": "NZDJPY",
+   "yubit": "NZDJPY.s",
+   "cat": "forex",
+   "desc": "New Zealand Dollar vs Japanese Yen"
+  },
+  {
+   "sym": "GBPJPY",
+   "yubit": "GBPJPY.s",
+   "cat": "forex",
+   "desc": "Great Britain Pound vs Japanese Yen"
+  },
+  {
+   "sym": "AUDCAD",
+   "yubit": "AUDCAD.s",
+   "cat": "forex",
+   "desc": "Australian Dollar vs Canadian Dollar"
+  },
+  {
+   "sym": "EURNZD",
+   "yubit": "EURNZD.s",
+   "cat": "forex",
+   "desc": "Euro vs New Zealand Dollar"
+  },
+  {
+   "sym": "EURCHF",
+   "yubit": "EURCHF.s",
+   "cat": "forex",
+   "desc": "Euro vs Swiss Franc"
+  },
+  {
+   "sym": "GBPCAD",
+   "yubit": "GBPCAD.s",
+   "cat": "forex",
+   "desc": "Great Britain Pound vs Canadian Dollar"
+  },
+  {
+   "sym": "EURJPY",
+   "yubit": "EURJPY.s",
+   "cat": "forex",
+   "desc": "Euro vs Japanese Yen"
+  },
+  {
+   "sym": "USDHKD",
+   "yubit": "USDHKD.s",
+   "cat": "forex",
+   "desc": "US Dollar vs Hong Kong Dollar"
+  },
+  {
+   "sym": "AUDNZD",
+   "yubit": "AUDNZD.s",
+   "cat": "forex",
+   "desc": "Australian Dollar vs New Zealand Dollar"
+  },
+  {
+   "sym": "AUDUSD",
+   "yubit": "AUDUSD.s",
+   "cat": "forex",
+   "desc": "Australian Dollar vs US Dollar"
+  },
+  {
+   "sym": "NZDCHF",
+   "yubit": "NZDCHF.s",
+   "cat": "forex",
+   "desc": "New Zealand Dollar vs Swiss Franc"
+  },
+  {
+   "sym": "CHFJPY",
+   "yubit": "CHFJPY.s",
+   "cat": "forex",
+   "desc": "Swiss Frank vs Japanese Yen"
+  },
+  {
+   "sym": "GBPAUD",
+   "yubit": "GBPAUD.s",
+   "cat": "forex",
+   "desc": "Great Britain Pound vs Australian Dollar"
+  },
+  {
+   "sym": "NZDCAD",
+   "yubit": "NZDCAD.s",
+   "cat": "forex",
+   "desc": "New Zealand Dollar vs Canadian Dollar"
+  },
+  {
+   "sym": "NZDUSD",
+   "yubit": "NZDUSD.s",
+   "cat": "forex",
+   "desc": "New Zealand Dollar vs US Dollar"
+  },
+  {
+   "sym": "USDCAD",
+   "yubit": "USDCAD.s",
+   "cat": "forex",
+   "desc": "US Dollar vs Canadian Dollar"
+  },
+  {
+   "sym": "USDSGD",
+   "yubit": "USDSGD.s",
+   "cat": "forex",
+   "desc": "US Dollar vs Singapore Dollar"
+  },
+  {
+   "sym": "AUDCHF",
+   "yubit": "AUDCHF.s",
+   "cat": "forex",
+   "desc": "Australian Dollar vs Swiss Franc"
+  },
+  {
+   "sym": "USDCHF",
+   "yubit": "USDCHF.s",
+   "cat": "forex",
+   "desc": "US Dollar vs Swiss Franc"
+  },
+  {
+   "sym": "USDTRY",
+   "yubit": "USDTRY.s",
+   "cat": "forex",
+   "desc": "US Dollar vs Turkish Lira"
+  },
+  {
+   "sym": "USDZAR",
+   "yubit": "USDZAR.s",
+   "cat": "forex",
+   "desc": "US Dollar vs South African Rand"
+  },
+  {
+   "sym": "USDMXN",
+   "yubit": "USDMXN.s",
+   "cat": "forex",
+   "desc": "US Dollar vs Mexican Peso"
+  },
+  {
+   "sym": "USDNOK",
+   "yubit": "USDNOK.s",
+   "cat": "forex",
+   "desc": "US Dollar vs Norwegian Krone"
+  },
+  {
+   "sym": "USDSEK",
+   "yubit": "USDSEK.s",
+   "cat": "forex",
+   "desc": "US Dollar vs Swedish Krona"
+  },
+  {
+   "sym": "USDPLN",
+   "yubit": "USDPLN.s",
+   "cat": "forex",
+   "desc": "US Dollar vs Polish Zloty"
+  },
+  {
+   "sym": "USDHUF",
+   "yubit": "USDHUF.s",
+   "cat": "forex",
+   "desc": "US Dollar vs Hungarian Forint"
+  },
+  {
+   "sym": "USDCZK",
+   "yubit": "USDCZK.s",
+   "cat": "forex",
+   "desc": "US Dollar vs Czech Koruna"
+  },
+  {
+   "sym": "USDILS",
+   "yubit": "USDILS.s",
+   "cat": "forex",
+   "desc": "US Dollar vs Israeli Shekel"
+  },
+  {
+   "sym": "USDTHB",
+   "yubit": "USDTHB.s",
+   "cat": "forex",
+   "desc": "US Dollar vs Thai Baht"
+  },
+  {
+   "sym": "USDRON",
+   "yubit": "USDRON.s",
+   "cat": "forex",
+   "desc": "US Dollar vs Romanian Leu"
+  },
+  {
+   "sym": "EURTRY",
+   "yubit": "EURTRY.s",
+   "cat": "forex",
+   "desc": "Euro vs Turkish Lira"
+  },
+  {
+   "sym": "EURZAR",
+   "yubit": "EURZAR.s",
+   "cat": "forex",
+   "desc": "Euro vs South African Rand"
+  },
+  {
+   "sym": "EURMXN",
+   "yubit": "EURMXN.s",
+   "cat": "forex",
+   "desc": "Euro vs Mexican Peso"
+  },
+  {
+   "sym": "EURNOK",
+   "yubit": "EURNOK.s",
+   "cat": "forex",
+   "desc": "Euro vs Norwegian Krone"
+  },
+  {
+   "sym": "EURSEK",
+   "yubit": "EURSEK.s",
+   "cat": "forex",
+   "desc": "Euro vs Swedish Krona"
+  },
+  {
+   "sym": "EURPLN",
+   "yubit": "EURPLN.s",
+   "cat": "forex",
+   "desc": "Euro vs Polish Zloty"
+  },
+  {
+   "sym": "EURHUF",
+   "yubit": "EURHUF.s",
+   "cat": "forex",
+   "desc": "Euro vs Hungarian Forint"
+  },
+  {
+   "sym": "EURCZK",
+   "yubit": "EURCZK.s",
+   "cat": "forex",
+   "desc": "Euro vs Czech Koruna"
+  },
+  {
+   "sym": "TRYJPY",
+   "yubit": "TRYJPY.s",
+   "cat": "forex",
+   "desc": "Turkish Lira vs Japanese Yen"
+  },
+  {
+   "sym": "ZARJPY",
+   "yubit": "ZARJPY.s",
+   "cat": "forex",
+   "desc": "South African Rand vs Japanese Yen"
+  },
+  {
+   "sym": "MXNJPY",
+   "yubit": "MXNJPY.s",
+   "cat": "forex",
+   "desc": "Mexican Peso vs Japanese Yen"
+  },
+  {
+   "sym": "AUDSGD",
+   "yubit": "AUDSGD.s",
+   "cat": "forex",
+   "desc": "Australian Dollar vs Singapore Dollar"
+  },
+  {
+   "sym": "NZDSGD",
+   "yubit": "NZDSGD.s",
+   "cat": "forex",
+   "desc": "New Zealand Dollar vs Singapore Dollar"
+  },
+  {
+   "sym": "EURSGD",
+   "yubit": "EURSGD.s",
+   "cat": "forex",
+   "desc": "Euro vs Singapore Dollar"
+  },
+  {
+   "sym": "CHFSGD",
+   "yubit": "CHFSGD.s",
+   "cat": "forex",
+   "desc": "Swiss Franc vs Singapore Dollar"
+  },
+  {
+   "sym": "CADHKD",
+   "yubit": "CADHKD.s",
+   "cat": "forex",
+   "desc": "Canadian Dollar vs Hong Kong Dollar"
+  },
+  {
+   "sym": "EURHKD",
+   "yubit": "EURHKD.s",
+   "cat": "forex",
+   "desc": "Euro vs Hong Kong Dollar"
+  },
+  {
+   "sym": "HKDJPY",
+   "yubit": "HKDJPY.s",
+   "cat": "forex",
+   "desc": "Hong Kong Dollar vs Japanese Yen"
+  },
+  {
+   "sym": "SGDJPY",
+   "yubit": "SGDJPY.s",
+   "cat": "forex",
+   "desc": "Singapore Dollar vs Japanese Yen"
+  },
+  {
+   "sym": "AUDPLN",
+   "yubit": "AUDPLN.s",
+   "cat": "forex",
+   "desc": "Australian Dollar vs Polish Zloty"
+  },
+  {
+   "sym": "CADPLN",
+   "yubit": "CADPLN.s",
+   "cat": "forex",
+   "desc": "Canadian Dollar vs Polish Zloty"
+  },
+  {
+   "sym": "NZDPLN",
+   "yubit": "NZDPLN.s",
+   "cat": "forex",
+   "desc": "New Zealand Dollar vs Polish Zloty"
+  },
+  {
+   "sym": "CHFPLN",
+   "yubit": "CHFPLN.s",
+   "cat": "forex",
+   "desc": "Swiss Franc vs Polish Zloty"
+  }
+ ],
+ "usstock": [
+  {
+   "sym": "CRCL",
+   "yubit": "CRCL",
+   "cat": "usstock",
+   "desc": "Circle"
+  },
+  {
+   "sym": "SNOW",
+   "yubit": "SNOW",
+   "cat": "usstock",
+   "desc": "Snowflake Inc."
+  },
+  {
+   "sym": "CMCSA",
+   "yubit": "CMCSA",
+   "cat": "usstock",
+   "desc": "Comcast Corp - Class A"
+  },
+  {
+   "sym": "ABT",
+   "yubit": "ABT",
+   "cat": "usstock",
+   "desc": "Abbott Laboratories"
+  },
+  {
+   "sym": "CVS",
+   "yubit": "CVS",
+   "cat": "usstock",
+   "desc": "CVS Health Corp."
+  },
+  {
+   "sym": "HD",
+   "yubit": "HD",
+   "cat": "usstock",
+   "desc": "Home Depot Inc"
+  },
+  {
+   "sym": "KO",
+   "yubit": "KO",
+   "cat": "usstock",
+   "desc": "Coca-Cola Co"
+  },
+  {
+   "sym": "FUTU",
+   "yubit": "FUTU",
+   "cat": "usstock",
+   "desc": "Futu Holdings Ltd-Adr"
+  },
+  {
+   "sym": "VFS",
+   "yubit": "VFS",
+   "cat": "usstock",
+   "desc": "VinFast Auto Ltd"
+  },
+  {
+   "sym": "BLSH",
+   "yubit": "BLSH",
+   "cat": "usstock",
+   "desc": "Bullish Inc."
+  },
+  {
+   "sym": "LITE",
+   "yubit": "LITE",
+   "cat": "usstock",
+   "desc": "Lumentum Holdings"
+  },
+  {
+   "sym": "CSCO",
+   "yubit": "CSCO",
+   "cat": "usstock",
+   "desc": "Cisco Systems Inc"
+  },
+  {
+   "sym": "HIMX",
+   "yubit": "HIMX",
+   "cat": "usstock",
+   "desc": "Himax Technologies Inc"
+  },
+  {
+   "sym": "HPQ",
+   "yubit": "HPQ",
+   "cat": "usstock",
+   "desc": "HP Inc"
+  },
+  {
+   "sym": "AVGO",
+   "yubit": "AVGO",
+   "cat": "usstock",
+   "desc": "Broadcom Inc"
+  },
+  {
+   "sym": "BIDU",
+   "yubit": "BIDU",
+   "cat": "usstock",
+   "desc": "Baidu Inc"
+  },
+  {
+   "sym": "GS",
+   "yubit": "GS",
+   "cat": "usstock",
+   "desc": "Goldman Sachs Group Inc"
+  },
+  {
+   "sym": "BP",
+   "yubit": "BP",
+   "cat": "usstock",
+   "desc": "BP PLC ADR"
+  },
+  {
+   "sym": "SBUX",
+   "yubit": "SBUX",
+   "cat": "usstock",
+   "desc": "Starbucks Corp"
+  },
+  {
+   "sym": "UGI",
+   "yubit": "UGI",
+   "cat": "usstock",
+   "desc": "United Gas Improvement Corp"
+  },
+  {
+   "sym": "FDX",
+   "yubit": "FDX",
+   "cat": "usstock",
+   "desc": "FedEx Corp"
+  },
+  {
+   "sym": "MA",
+   "yubit": "MA",
+   "cat": "usstock",
+   "desc": "MasterCard Inc"
+  },
+  {
+   "sym": "NTES",
+   "yubit": "NTES",
+   "cat": "usstock",
+   "desc": "NetEase Inc"
+  },
+  {
+   "sym": "GM",
+   "yubit": "GM",
+   "cat": "usstock",
+   "desc": "General Motors Company"
+  },
+  {
+   "sym": "V",
+   "yubit": "V",
+   "cat": "usstock",
+   "desc": "Visa Inc"
+  },
+  {
+   "sym": "ARM",
+   "yubit": "ARM",
+   "cat": "usstock",
+   "desc": "ARM Holdings plc."
+  },
+  {
+   "sym": "HON",
+   "yubit": "HON",
+   "cat": "usstock",
+   "desc": "Honeywell International Inc"
+  },
+  {
+   "sym": "NVDA",
+   "yubit": "NVDA",
+   "cat": "usstock",
+   "desc": "NVIDIA Corp"
+  },
+  {
+   "sym": "ABNB",
+   "yubit": "ABNB",
+   "cat": "usstock",
+   "desc": "Airbnb Inc"
+  },
+  {
+   "sym": "BAC",
+   "yubit": "BAC",
+   "cat": "usstock",
+   "desc": "Bank of America Corp"
+  },
+  {
+   "sym": "MCO",
+   "yubit": "MCO",
+   "cat": "usstock",
+   "desc": "MyEco Group Ltd"
+  },
+  {
+   "sym": "GE",
+   "yubit": "GE",
+   "cat": "usstock",
+   "desc": "General Electric Company"
+  },
+  {
+   "sym": "AIG",
+   "yubit": "AIG",
+   "cat": "usstock",
+   "desc": "American International Group Inc"
+  },
+  {
+   "sym": "EBAY",
+   "yubit": "EBAY",
+   "cat": "usstock",
+   "desc": "eBay Inc"
+  },
+  {
+   "sym": "GOOG",
+   "yubit": "GOOG",
+   "cat": "usstock",
+   "desc": "Alphabet Inc - C"
+  },
+  {
+   "sym": "IBM",
+   "yubit": "IBM",
+   "cat": "usstock",
+   "desc": "International Business Machines Corp"
+  },
+  {
+   "sym": "PDD",
+   "yubit": "PDD",
+   "cat": "usstock",
+   "desc": "PDD Holdings Inc"
+  },
+  {
+   "sym": "TM",
+   "yubit": "TM",
+   "cat": "usstock",
+   "desc": "Toyota Motor Corp (ADRs)"
+  },
+  {
+   "sym": "NIO",
+   "yubit": "NIO",
+   "cat": "usstock",
+   "desc": "NIO Inc"
+  },
+  {
+   "sym": "ORCL",
+   "yubit": "ORCL",
+   "cat": "usstock",
+   "desc": "Oracle Corp"
+  },
+  {
+   "sym": "AMZN",
+   "yubit": "AMZN",
+   "cat": "usstock",
+   "desc": "Amazon.com Inc"
+  },
+  {
+   "sym": "INTC",
+   "yubit": "INTC",
+   "cat": "usstock",
+   "desc": "Intel Corp"
+  },
+  {
+   "sym": "CAT",
+   "yubit": "CAT",
+   "cat": "usstock",
+   "desc": "Caterpillar Inc"
+  },
+  {
+   "sym": "META",
+   "yubit": "META",
+   "cat": "usstock",
+   "desc": "Meta Platforms Inc"
+  },
+  {
+   "sym": "TSLA",
+   "yubit": "TSLA",
+   "cat": "usstock",
+   "desc": "Tesla Inc"
+  },
+  {
+   "sym": "COST",
+   "yubit": "COST",
+   "cat": "usstock",
+   "desc": "Costco Wholesale Corp"
+  },
+  {
+   "sym": "WB",
+   "yubit": "WB",
+   "cat": "usstock",
+   "desc": "Weibo Corporation"
+  },
+  {
+   "sym": "JPM",
+   "yubit": "JPM",
+   "cat": "usstock",
+   "desc": "JPMorgan Chase & Co"
+  },
+  {
+   "sym": "MDLZ",
+   "yubit": "MDLZ",
+   "cat": "usstock",
+   "desc": "Mondelez International Inc"
+  },
+  {
+   "sym": "MSFT",
+   "yubit": "MSFT",
+   "cat": "usstock",
+   "desc": "Microsoft Corp"
+  },
+  {
+   "sym": "MANU",
+   "yubit": "MANU",
+   "cat": "usstock",
+   "desc": "Manchester United PLC"
+  },
+  {
+   "sym": "DUK",
+   "yubit": "DUK",
+   "cat": "usstock",
+   "desc": "Duke Energy Corporation"
+  },
+  {
+   "sym": "LMT",
+   "yubit": "LMT",
+   "cat": "usstock",
+   "desc": "Lockheed Martin Corp"
+  },
+  {
+   "sym": "NKE",
+   "yubit": "NKE",
+   "cat": "usstock",
+   "desc": "Nike Inc"
+  },
+  {
+   "sym": "TSM",
+   "yubit": "TSM",
+   "cat": "usstock",
+   "desc": "TSMC / Taiwan Semiconductor Man Co (ADRs)"
+  },
+  {
+   "sym": "UNH",
+   "yubit": "UNH",
+   "cat": "usstock",
+   "desc": "UnitedHealth Group Inc"
+  },
+  {
+   "sym": "WFC",
+   "yubit": "WFC",
+   "cat": "usstock",
+   "desc": "Wells Fargo & Co"
+  },
+  {
+   "sym": "AXP",
+   "yubit": "AXP",
+   "cat": "usstock",
+   "desc": "American Express Co."
+  },
+  {
+   "sym": "BABA",
+   "yubit": "BABA",
+   "cat": "usstock",
+   "desc": "Alibaba Group Holding Limited"
+  },
+  {
+   "sym": "JNJ",
+   "yubit": "JNJ",
+   "cat": "usstock",
+   "desc": "Johnson & Johnson"
+  },
+  {
+   "sym": "DIS",
+   "yubit": "DIS",
+   "cat": "usstock",
+   "desc": "The Walt Disney Company"
+  },
+  {
+   "sym": "SPOT",
+   "yubit": "SPOT",
+   "cat": "usstock",
+   "desc": "Spotify"
+  },
+  {
+   "sym": "JD",
+   "yubit": "JD",
+   "cat": "usstock",
+   "desc": "JD.Com Inc"
+  },
+  {
+   "sym": "XOM",
+   "yubit": "XOM",
+   "cat": "usstock",
+   "desc": "Exxon Mobil Corp"
+  },
+  {
+   "sym": "RIOT",
+   "yubit": "RIOT",
+   "cat": "usstock",
+   "desc": "Riot Platforms"
+  },
+  {
+   "sym": "AAL",
+   "yubit": "AAL",
+   "cat": "usstock",
+   "desc": "American Airlines Group Inc"
+  },
+  {
+   "sym": "PM",
+   "yubit": "PM",
+   "cat": "usstock",
+   "desc": "Philip Morris International"
+  },
+  {
+   "sym": "MMM",
+   "yubit": "MMM",
+   "cat": "usstock",
+   "desc": "3M Co"
+  },
+  {
+   "sym": "UPS",
+   "yubit": "UPS",
+   "cat": "usstock",
+   "desc": "United Parcel Service Inc"
+  },
+  {
+   "sym": "MSTR",
+   "yubit": "MSTR",
+   "cat": "usstock",
+   "desc": "Microstrategy Inc Class A"
+  },
+  {
+   "sym": "PYPL",
+   "yubit": "PYPL",
+   "cat": "usstock",
+   "desc": "PayPal"
+  },
+  {
+   "sym": "BA",
+   "yubit": "BA",
+   "cat": "usstock",
+   "desc": "Boeing Company"
+  },
+  {
+   "sym": "HUT",
+   "yubit": "HUT",
+   "cat": "usstock",
+   "desc": "Hut 8 Corp."
+  },
+  {
+   "sym": "MCD",
+   "yubit": "MCD",
+   "cat": "usstock",
+   "desc": "McDonald's Corp"
+  },
+  {
+   "sym": "CRM",
+   "yubit": "CRM",
+   "cat": "usstock",
+   "desc": "Salesforce.com Inc"
+  },
+  {
+   "sym": "CVX",
+   "yubit": "CVX",
+   "cat": "usstock",
+   "desc": "Chevron Corp"
+  },
+  {
+   "sym": "PEP",
+   "yubit": "PEP",
+   "cat": "usstock",
+   "desc": "PepsiCo Inc"
+  },
+  {
+   "sym": "PFE",
+   "yubit": "PFE",
+   "cat": "usstock",
+   "desc": "Pfizer Inc"
+  },
+  {
+   "sym": "ADBE",
+   "yubit": "ADBE",
+   "cat": "usstock",
+   "desc": "Adobe Inc."
+  },
+  {
+   "sym": "MRK",
+   "yubit": "MRK",
+   "cat": "usstock",
+   "desc": "Merck & Co Inc"
+  },
+  {
+   "sym": "QCOM",
+   "yubit": "QCOM",
+   "cat": "usstock",
+   "desc": "Qualcomm Inc"
+  },
+  {
+   "sym": "NVS",
+   "yubit": "NVS",
+   "cat": "usstock",
+   "desc": "Novartis AG (ADRs)"
+  },
+  {
+   "sym": "ZM",
+   "yubit": "ZM",
+   "cat": "usstock",
+   "desc": "Zoom Video Communications"
+  },
+  {
+   "sym": "C",
+   "yubit": "C",
+   "cat": "usstock",
+   "desc": "Citigroup Inc"
+  },
+  {
+   "sym": "NFLX",
+   "yubit": "NFLX",
+   "cat": "usstock",
+   "desc": "Netflix"
+  },
+  {
+   "sym": "VZ",
+   "yubit": "VZ",
+   "cat": "usstock",
+   "desc": "Verizon Communications Inc"
+  },
+  {
+   "sym": "PG",
+   "yubit": "PG",
+   "cat": "usstock",
+   "desc": "Procter & Gamble Co"
+  },
+  {
+   "sym": "PLTR",
+   "yubit": "PLTR",
+   "cat": "usstock",
+   "desc": "Palantir"
+  },
+  {
+   "sym": "UBER",
+   "yubit": "UBER",
+   "cat": "usstock",
+   "desc": "Uber Technologies Inc"
+  },
+  {
+   "sym": "COIN",
+   "yubit": "COIN",
+   "cat": "usstock",
+   "desc": "Coinbase Global Inc"
+  },
+  {
+   "sym": "AAPL",
+   "yubit": "AAPL",
+   "cat": "usstock",
+   "desc": "Apple Inc"
+  },
+  {
+   "sym": "AMD",
+   "yubit": "AMD",
+   "cat": "usstock",
+   "desc": "Advanced Micro Devices Inc."
+  },
+  {
+   "sym": "COHR",
+   "yubit": "COHR",
+   "cat": "usstock",
+   "desc": "Coherent"
+  },
+  {
+   "sym": "WMT",
+   "yubit": "WMT",
+   "cat": "usstock",
+   "desc": "Walmart Inc"
+  },
+  {
+   "sym": "RIVN",
+   "yubit": "RIVN",
+   "cat": "usstock",
+   "desc": "Rivian Automotive Inc"
+  },
+  {
+   "sym": "SBET",
+   "yubit": "SBET",
+   "cat": "usstock",
+   "desc": "SharpLink Gaming Inc"
+  },
+  {
+   "sym": "TME",
+   "yubit": "TME",
+   "cat": "usstock",
+   "desc": "Tencent Music"
+  },
+  {
+   "sym": "T",
+   "yubit": "T",
+   "cat": "usstock",
+   "desc": "AT&T Inc."
+  },
+  {
+   "sym": "AMAT",
+   "yubit": "AMAT",
+   "cat": "usstock",
+   "desc": "Applied Materials Inc"
+  },
+  {
+   "sym": "CRDO",
+   "yubit": "CRDO",
+   "cat": "usstock",
+   "desc": "Credo Technology"
+  },
+  {
+   "sym": "BUD",
+   "yubit": "BUD",
+   "cat": "usstock",
+   "desc": "Anheuser-Busch InBev (ADRs)"
+  },
+  {
+   "sym": "MRNA",
+   "yubit": "MRNA",
+   "cat": "usstock",
+   "desc": "Moderna"
+  },
+  {
+   "sym": "XPEV",
+   "yubit": "XPEV",
+   "cat": "usstock",
+   "desc": "XPeng Inc"
+  },
+  {
+   "sym": "U",
+   "yubit": "U",
+   "cat": "usstock",
+   "desc": "Unity Software Inc"
+  },
+  {
+   "sym": "TCOM",
+   "yubit": "TCOM",
+   "cat": "usstock",
+   "desc": "Trip.Com Group Ltd (ADRs)"
+  },
+  {
+   "sym": "HSBC",
+   "yubit": "HSBC",
+   "cat": "usstock",
+   "desc": "HSBC Holdings PLC (ADRs)"
+  },
+  {
+   "sym": "LI",
+   "yubit": "LI",
+   "cat": "usstock",
+   "desc": "Li Auto Inc (ADRs)"
+  },
+  {
+   "sym": "MU",
+   "yubit": "MU",
+   "cat": "usstock",
+   "desc": "Micron Technology Inc"
+  },
+  {
+   "sym": "F",
+   "yubit": "F",
+   "cat": "usstock",
+   "desc": "Ford Motor Co"
+  },
+  {
+   "sym": "UL",
+   "yubit": "UL",
+   "cat": "usstock",
+   "desc": "Unilever PLC"
+  },
+  {
+   "sym": "TRMB",
+   "yubit": "TRMB",
+   "cat": "usstock",
+   "desc": "Trimble Inc."
+  },
+  {
+   "sym": "LULU",
+   "yubit": "LULU",
+   "cat": "usstock",
+   "desc": "Lululemon"
+  },
+  {
+   "sym": "MARA",
+   "yubit": "MARA",
+   "cat": "usstock",
+   "desc": "MARA Holdings, Inc."
+  },
+  {
+   "sym": "INSM",
+   "yubit": "INSM",
+   "cat": "usstock",
+   "desc": "Insmed Incorporated"
+  },
+  {
+   "sym": "GLXY",
+   "yubit": "GLXY",
+   "cat": "usstock",
+   "desc": "Galaxy Digital Inc."
+  },
+  {
+   "sym": "LRCX",
+   "yubit": "LRCX",
+   "cat": "usstock",
+   "desc": "Lam Research"
+  },
+  {
+   "sym": "OKLO",
+   "yubit": "OKLO",
+   "cat": "usstock",
+   "desc": "Oklo Inc."
+  },
+  {
+   "sym": "SHOP",
+   "yubit": "SHOP",
+   "cat": "usstock",
+   "desc": "Shopify"
+  },
+  {
+   "sym": "APP",
+   "yubit": "APP",
+   "cat": "usstock",
+   "desc": "AppLovin"
+  },
+  {
+   "sym": "SE",
+   "yubit": "SE",
+   "cat": "usstock",
+   "desc": "Sea Ltd (ADRs)"
+  },
+  {
+   "sym": "BNTX",
+   "yubit": "BNTX",
+   "cat": "usstock",
+   "desc": "BioNTech SE-ADR"
+  },
+  {
+   "sym": "HOOD",
+   "yubit": "HOOD",
+   "cat": "usstock",
+   "desc": "Robinhood"
+  },
+  {
+   "sym": "ASML",
+   "yubit": "ASML",
+   "cat": "usstock",
+   "desc": "ASML Holding NV (Nasdaq)"
+  },
+  {
+   "sym": "GOOGL",
+   "yubit": "GOOGL",
+   "cat": "usstock",
+   "desc": "Alphabet Inc. Class A Common Stock"
+  },
+  {
+   "sym": "MRVL",
+   "yubit": "MRVL",
+   "cat": "usstock",
+   "desc": "Marvell Technology, Inc. Common Stock"
+  },
+  {
+   "sym": "RDDT",
+   "yubit": "RDDT",
+   "cat": "usstock",
+   "desc": "Reddit, Inc."
+  },
+  {
+   "sym": "LLY",
+   "yubit": "LLY",
+   "cat": "usstock",
+   "desc": "Eli Lilly & Co."
+  },
+  {
+   "sym": "GME",
+   "yubit": "GME",
+   "cat": "usstock",
+   "desc": "GameStop Corp. Class A"
+  },
+  {
+   "sym": "SNDK",
+   "yubit": "SNDK",
+   "cat": "usstock",
+   "desc": "Sandisk Corporation Common Stock"
+  },
+  {
+   "sym": "BE",
+   "yubit": "BE",
+   "cat": "usstock",
+   "desc": "Bloom Energy Corporation"
+  },
+  {
+   "sym": "APLD",
+   "yubit": "APLD",
+   "cat": "usstock",
+   "desc": "Applied Digital Corporation Common Stock"
+  },
+  {
+   "sym": "RKLB",
+   "yubit": "RKLB",
+   "cat": "usstock",
+   "desc": "Rocket Lab Corporation Common Stock"
+  },
+  {
+   "sym": "CBRS",
+   "yubit": "CBRS",
+   "cat": "usstock",
+   "desc": "Cerebras Systems Inc. Class A Common Stock"
+  },
+  {
+   "sym": "SPCX",
+   "yubit": "SPCX",
+   "cat": "usstock",
+   "desc": "Space Exploration Technologies Corp. Class A Common Stock"
+  },
+  {
+   "sym": "NBIS",
+   "yubit": "NBIS",
+   "cat": "usstock",
+   "desc": "Nebius Group N.V. Class A Ordinary Shares"
+  },
+  {
+   "sym": "WDC",
+   "yubit": "WDC",
+   "cat": "usstock",
+   "desc": "Western Digital Corp."
+  },
+  {
+   "sym": "NVO",
+   "yubit": "NVO",
+   "cat": "usstock",
+   "desc": "Novo-Nordisk A/S"
+  },
+  {
+   "sym": "NOK",
+   "yubit": "NOK",
+   "cat": "usstock",
+   "desc": "Nokia Corporation"
+  },
+  {
+   "sym": "ASTS",
+   "yubit": "ASTS",
+   "cat": "usstock",
+   "desc": "AST SpaceMobile, Inc. Class A Common Stock"
+  },
+  {
+   "sym": "INFQ",
+   "yubit": "INFQ",
+   "cat": "usstock",
+   "desc": "Infleqtion, Inc."
+  },
+  {
+   "sym": "RGTI",
+   "yubit": "RGTI",
+   "cat": "usstock",
+   "desc": "Rigetti Computing, Inc. Common Stock"
+  },
+  {
+   "sym": "QBTS",
+   "yubit": "QBTS",
+   "cat": "usstock",
+   "desc": "D-Wave Quantum Inc. Common Stock"
+  },
+  {
+   "sym": "IONQ",
+   "yubit": "IONQ",
+   "cat": "usstock",
+   "desc": "IonQ, Inc."
+  },
+  {
+   "sym": "ARQQ",
+   "yubit": "ARQQ",
+   "cat": "usstock",
+   "desc": "Arqit Quantum Inc. Ordinary Shares"
+  },
+  {
+   "sym": "AAOI",
+   "yubit": "AAOI",
+   "cat": "usstock",
+   "desc": "Applied Optoelectronics, Inc."
+  },
+  {
+   "sym": "AXTI",
+   "yubit": "AXTI",
+   "cat": "usstock",
+   "desc": "AXT Inc"
+  },
+  {
+   "sym": "BX",
+   "yubit": "BX",
+   "cat": "usstock",
+   "desc": "Blackstone Inc."
+  },
+  {
+   "sym": "CRWD",
+   "yubit": "CRWD",
+   "cat": "usstock",
+   "desc": "CrowdStrike Holdings, Inc. Class A Common Stock"
+  },
+  {
+   "sym": "CRWV",
+   "yubit": "CRWV",
+   "cat": "usstock",
+   "desc": "CoreWeave, Inc. Class A Common Stock"
+  },
+  {
+   "sym": "DELL",
+   "yubit": "DELL",
+   "cat": "usstock",
+   "desc": "Dell Technologies Inc."
+  },
+  {
+   "sym": "HIMS",
+   "yubit": "HIMS",
+   "cat": "usstock",
+   "desc": "Hims & Hers Health, Inc."
+  },
+  {
+   "sym": "HPE",
+   "yubit": "HPE",
+   "cat": "usstock",
+   "desc": "Hewlett Packard Enterprise Company"
+  },
+  {
+   "sym": "IREN",
+   "yubit": "IREN",
+   "cat": "usstock",
+   "desc": "IREN Limited Ordinary Shares"
+  },
+  {
+   "sym": "ONDS",
+   "yubit": "ONDS",
+   "cat": "usstock",
+   "desc": "Ondas Inc. Common Stock"
+  },
+  {
+   "sym": "PAYP",
+   "yubit": "PAYP",
+   "cat": "usstock",
+   "desc": "PayPay Corporation American Depository Shares"
+  },
+  {
+   "sym": "USAR",
+   "yubit": "USAR",
+   "cat": "usstock",
+   "desc": "USA Rare Earth, Inc. Class A Common Stock"
+  },
+  {
+   "sym": "DKNG",
+   "yubit": "DKNG",
+   "cat": "usstock",
+   "desc": "DraftKings Inc. Class A Common Stock"
+  },
+  {
+   "sym": "FLNC",
+   "yubit": "FLNC",
+   "cat": "usstock",
+   "desc": "Fluence Energy, Inc. Class A Common Stock"
+  },
+  {
+   "sym": "TXN",
+   "yubit": "TXN",
+   "cat": "usstock",
+   "desc": "Texas Instruments Incorporated"
+  },
+  {
+   "sym": "TER",
+   "yubit": "TER",
+   "cat": "usstock",
+   "desc": "Teradyne, Inc. Common Stock"
+  },
+  {
+   "sym": "TTWO",
+   "yubit": "TTWO",
+   "cat": "usstock",
+   "desc": "Take-Two Interactive Software Inc"
+  },
+  {
+   "sym": "BSP",
+   "yubit": "BSP",
+   "cat": "usstock",
+   "desc": "Bending Spoons S.p.A. Ordinary Shares"
+  },
+  {
+   "sym": "SOFI",
+   "yubit": "SOFI",
+   "cat": "usstock",
+   "desc": "SoFi Technologies, Inc. Common Stock"
+  },
+  {
+   "sym": "PANW",
+   "yubit": "PANW",
+   "cat": "usstock",
+   "desc": "Palo Alto Networks, Inc. Common Stock"
+  },
+  {
+   "sym": "SMCI",
+   "yubit": "SMCI",
+   "cat": "usstock",
+   "desc": "Super Micro Computer, Inc. Common Stock"
+  },
+  {
+   "sym": "SKHY",
+   "yubit": "SKHY",
+   "cat": "usstock",
+   "desc": "SK hynix Inc. American Depositary Shares"
+  },
+  {
+   "sym": "GLW",
+   "yubit": "GLW",
+   "cat": "usstock",
+   "desc": "Corning Incorporated"
+  },
+  {
+   "sym": "AMC",
+   "yubit": "AMC",
+   "cat": "usstock",
+   "desc": "AMC ENTERTAINMENT HOLDINGS, INC."
+  },
+  {
+   "sym": "AMKR",
+   "yubit": "AMKR",
+   "cat": "usstock",
+   "desc": "Amkor Technology Inc"
+  },
+  {
+   "sym": "SIMO",
+   "yubit": "SIMO",
+   "cat": "usstock",
+   "desc": "Silicon Motion Technology Corporation"
+  },
+  {
+   "sym": "NET",
+   "yubit": "NET",
+   "cat": "usstock",
+   "desc": "Cloudflare, Inc. Class A common stock, par value $0.001 per share"
+  },
+  {
+   "sym": "VST",
+   "yubit": "VST",
+   "cat": "usstock",
+   "desc": "Vistra Corp."
+  },
+  {
+   "sym": "SITM",
+   "yubit": "SITM",
+   "cat": "usstock",
+   "desc": "SiTime Corporation Common Stock"
+  },
+  {
+   "sym": "XNDU",
+   "yubit": "XNDU",
+   "cat": "usstock",
+   "desc": "Xanadu Quantum Technologies Limited Class B Subordinate Voting Shares"
+  },
+  {
+   "sym": "OUST",
+   "yubit": "OUST",
+   "cat": "usstock",
+   "desc": "Ouster, Inc."
+  },
+  {
+   "sym": "DJT",
+   "yubit": "DJT",
+   "cat": "usstock",
+   "desc": "Trump Media & Technology Group Corp. Common Stock"
+  },
+  {
+   "sym": "TEM",
+   "yubit": "TEM",
+   "cat": "usstock",
+   "desc": "Tempus AI, Inc. Class A Common Stock"
+  },
+  {
+   "sym": "BYD",
+   "yubit": "BYD",
+   "cat": "usstock",
+   "desc": "Boyd Gaming Corporation"
+  },
+  {
+   "sym": "GPRO",
+   "yubit": "GPRO",
+   "cat": "usstock",
+   "desc": "GoPro, Inc."
+  },
+  {
+   "sym": "QQQ",
+   "yubit": "QQQ",
+   "cat": "usstock",
+   "desc": "Invesco QQQ Trust, Series 1"
+  },
+  {
+   "sym": "KWEB",
+   "yubit": "KWEB",
+   "cat": "usstock",
+   "desc": "KraneShares CSI China Internet ETF"
+  },
+  {
+   "sym": "INDA",
+   "yubit": "INDA",
+   "cat": "usstock",
+   "desc": "iShares MSCI India ETF"
+  },
+  {
+   "sym": "EWH",
+   "yubit": "EWH",
+   "cat": "usstock",
+   "desc": "iShares MSCI Hong Kong ETF"
+  },
+  {
+   "sym": "SQQQ",
+   "yubit": "SQQQ",
+   "cat": "usstock",
+   "desc": "ProShares UltraPro Short QQQ"
+  },
+  {
+   "sym": "EWJ",
+   "yubit": "EWJ",
+   "cat": "usstock",
+   "desc": "iShares MSCI Japan ETF"
+  },
+  {
+   "sym": "SOXS",
+   "yubit": "SOXS",
+   "cat": "usstock",
+   "desc": "Direxion Daily Semiconductor Bear 3X ETF"
+  },
+  {
+   "sym": "SPY",
+   "yubit": "SPY",
+   "cat": "usstock",
+   "desc": "State Street SPDR S&P 500 ETF Trust"
+  },
+  {
+   "sym": "EWY",
+   "yubit": "EWY",
+   "cat": "usstock",
+   "desc": "iShares MSCI South Korea ETF"
+  },
+  {
+   "sym": "SOXL",
+   "yubit": "SOXL",
+   "cat": "usstock",
+   "desc": "Direxion Daily Semiconductor Bull 3X ETF"
+  },
+  {
+   "sym": "TQQQ",
+   "yubit": "TQQQ",
+   "cat": "usstock",
+   "desc": "ProShares  UltraPro QQQ"
+  },
+  {
+   "sym": "DRAM",
+   "yubit": "DRAM",
+   "cat": "usstock",
+   "desc": "Roundhill Memory ETF"
+  },
+  {
+   "sym": "IWM",
+   "yubit": "IWM",
+   "cat": "usstock",
+   "desc": "iShares Russell 2000 ETF"
+  },
+  {
+   "sym": "URNM",
+   "yubit": "URNM",
+   "cat": "usstock",
+   "desc": "Sprott Uranium Miners ETF"
+  },
+  {
+   "sym": "XLE",
+   "yubit": "XLE",
+   "cat": "usstock",
+   "desc": "State Street Energy Select Sector SPDR ETF"
+  },
+  {
+   "sym": "EWZ",
+   "yubit": "EWZ",
+   "cat": "usstock",
+   "desc": "iShares MSCI Brazil ETF"
+  },
+  {
+   "sym": "KSTR",
+   "yubit": "KSTR",
+   "cat": "usstock",
+   "desc": "KraneShares China Technology & Semiconductor STAR 50 Index ETF"
+  },
+  {
+   "sym": "XBI",
+   "yubit": "XBI",
+   "cat": "usstock",
+   "desc": "State Street SPDR S&P Biotech ETF"
+  },
+  {
+   "sym": "TMF",
+   "yubit": "TMF",
+   "cat": "usstock",
+   "desc": "Direxion Daily 20+ Year Treasury Bull 3X ETF"
+  },
+  {
+   "sym": "TBT",
+   "yubit": "TBT",
+   "cat": "usstock",
+   "desc": "ProShares Trust UltraShort Lehman 20+ Year Treasury"
+  },
+  {
+   "sym": "BITO",
+   "yubit": "BITO",
+   "cat": "usstock",
+   "desc": "ProShares Bitcoin ETF"
+  },
+  {
+   "sym": "SMH",
+   "yubit": "SMH",
+   "cat": "usstock",
+   "desc": "VanEck Semiconductor ETF"
+  },
+  {
+   "sym": "SKUU",
+   "yubit": "SKUU",
+   "cat": "usstock",
+   "desc": "GraniteShares 2x Long SK Hynix Daily ETF"
+  },
+  {
+   "sym": "SKDD",
+   "yubit": "SKDD",
+   "cat": "usstock",
+   "desc": "GraniteShares 2x Short SK Hynix Daily ETF"
+  },
+  {
+   "sym": "MUU",
+   "yubit": "MUU",
+   "cat": "usstock",
+   "desc": "Direxion Shares ETF Trust Direxion Daily MU Bull 2X ETF"
+  },
+  {
+   "sym": "RAM",
+   "yubit": "RAM",
+   "cat": "usstock",
+   "desc": "Roundhill T-REX 2X Long DRAM Daily Target ETF"
+  },
+  {
+   "sym": "GDX",
+   "yubit": "GDX",
+   "cat": "usstock",
+   "desc": "VanEck Gold Miners ETF"
+  },
+  {
+   "sym": "BRK.B",
+   "yubit": "BRKB",
+   "cat": "usstock",
+   "desc": "BERKSHIRE HATHAWAY Class B"
+  },
+  {
+   "sym": "OPENAI",
+   "yubit": "OPENAI",
+   "cat": "usstock",
+   "desc": "OPENAI (Yubit perp)"
+  },
+  {
+   "sym": "ANTHROPIC",
+   "yubit": "ANTHROPIC",
+   "cat": "usstock",
+   "desc": "ANTHROPIC (Yubit perp)"
+  },
+  {
+   "sym": "HYUNDAI",
+   "yubit": "HYUNDAI",
+   "cat": "usstock",
+   "desc": "HYUNDAI (Yubit perp)"
+  },
+  {
+   "sym": "NOW",
+   "yubit": "NOW",
+   "cat": "usstock",
+   "desc": "NOW (Yubit perp)"
+  },
+  {
+   "sym": "SAMSUNG",
+   "yubit": "SAMSUNG",
+   "cat": "usstock",
+   "desc": "SAMSUNG (Yubit perp)"
+  },
+  {
+   "sym": "SKHYNIX",
+   "yubit": "SKHYNIX",
+   "cat": "usstock",
+   "desc": "SKHYNIX (Yubit perp)"
+  },
+  {
+   "sym": "STRC",
+   "yubit": "STRC",
+   "cat": "usstock",
+   "desc": "STRC (Yubit perp)"
+  },
+  {
+   "sym": "FLEX",
+   "yubit": "FLEX",
+   "cat": "usstock",
+   "desc": "FLEX (Yubit perp)"
+  },
+  {
+   "sym": "BOT",
+   "yubit": "BOT",
+   "cat": "usstock",
+   "desc": "BOT (Yubit perp)"
+  },
+  {
+   "sym": "WEN",
+   "yubit": "WEN",
+   "cat": "usstock",
+   "desc": "WEN (Yubit perp)"
+  },
+  {
+   "sym": "INTW",
+   "yubit": "INTW",
+   "cat": "usstock",
+   "desc": "INTW (Yubit perp)"
+  },
+  {
+   "sym": "SNXX",
+   "yubit": "SNXX",
+   "cat": "usstock",
+   "desc": "SNXX (Yubit perp)"
+  },
+  {
+   "sym": "FWDI",
+   "yubit": "FWDI",
+   "cat": "usstock",
+   "desc": "FWDI (Yubit perp)"
+  },
+  {
+   "sym": "KORU",
+   "yubit": "KORU",
+   "cat": "usstock",
+   "desc": "KORU (Yubit perp)"
+  },
+  {
+   "sym": "SHAZ",
+   "yubit": "SHAZ",
+   "cat": "usstock",
+   "desc": "SHAZ (Yubit perp)"
+  },
+  {
+   "sym": "MINIMAX",
+   "yubit": "MINIMAX",
+   "cat": "usstock",
+   "desc": "MINIMAX (Yubit perp)"
+  },
+  {
+   "sym": "XIAOMI",
+   "yubit": "XIAOMI",
+   "cat": "usstock",
+   "desc": "XIAOMI (Yubit perp)"
+  },
+  {
+   "sym": "ZHIPU",
+   "yubit": "ZHIPU",
+   "cat": "usstock",
+   "desc": "ZHIPU (Yubit perp)"
+  },
+  {
+   "sym": "TENCENT",
+   "yubit": "TENCENT",
+   "cat": "usstock",
+   "desc": "TENCENT (Yubit perp)"
+  },
+  {
+   "sym": "KIOXIA",
+   "yubit": "KIOXIA",
+   "cat": "usstock",
+   "desc": "KIOXIA (Yubit perp)"
+  },
+  {
+   "sym": "ZHIPUHKD",
+   "yubit": "ZHIPUHKD",
+   "cat": "usstock",
+   "desc": "ZHIPUHKD (Yubit perp)"
+  },
+  {
+   "sym": "STXSTOCK",
+   "yubit": "STXSTOCK",
+   "cat": "usstock",
+   "desc": "STXSTOCK (Yubit perp)"
+  },
+  {
+   "sym": "MINIMAXHKD",
+   "yubit": "MINIMAXHKD",
+   "cat": "usstock",
+   "desc": "MINIMAXHKD (Yubit perp)"
+  },
+  {
+   "sym": "GIGADEVICE",
+   "yubit": "GIGADEVICE",
+   "cat": "usstock",
+   "desc": "GIGADEVICE (Yubit perp)"
+  },
+  {
+   "sym": "QNTSTOCK",
+   "yubit": "QNTSTOCK",
+   "cat": "usstock",
+   "desc": "QNTSTOCK (Yubit perp)"
+  },
+  {
+   "sym": "ASX",
+   "yubit": "ASX",
+   "cat": "usstock",
+   "desc": "ASX (Yubit perp)"
+  },
+  {
+   "sym": "KUAISHOU",
+   "yubit": "KUAISHOU",
+   "cat": "usstock",
+   "desc": "KUAISHOU (Yubit perp)"
+  },
+  {
+   "sym": "MEITUAN",
+   "yubit": "MEITUAN",
+   "cat": "usstock",
+   "desc": "MEITUAN (Yubit perp)"
+  },
+  {
+   "sym": "CXMT",
+   "yubit": "CXMT",
+   "cat": "usstock",
+   "desc": "CXMT (Yubit perp)"
+  },
+  {
+   "sym": "LYTE",
+   "yubit": "LYTE",
+   "cat": "usstock",
+   "desc": "LYTE (Yubit perp)"
+  },
+  {
+   "sym": "QNTX",
+   "yubit": "QNTX",
+   "cat": "usstock",
+   "desc": "QNTX (Yubit perp)"
+  },
+  {
+   "sym": "BBX",
+   "yubit": "BBX",
+   "cat": "usstock",
+   "desc": "BBX (Yubit perp)"
+  }
+ ],
+ "indices": [
+  {
+   "sym": "US30",
+   "yubit": "US30",
+   "cat": "indices",
+   "desc": "Dow Jones IA"
+  },
+  {
+   "sym": "EU50",
+   "yubit": "EU50",
+   "cat": "indices",
+   "desc": "EURO STOXX 50"
+  },
+  {
+   "sym": "HK50",
+   "yubit": "HK50",
+   "cat": "indices",
+   "desc": "HK HS 50"
+  },
+  {
+   "sym": "JPN225",
+   "yubit": "JPN225",
+   "cat": "indices",
+   "desc": "Nikkei 225"
+  },
+  {
+   "sym": "FRA40",
+   "yubit": "FRA40",
+   "cat": "indices",
+   "desc": "CAC40"
+  },
+  {
+   "sym": "NAS100",
+   "yubit": "NAS100",
+   "cat": "indices",
+   "desc": "NASDAQ 100"
+  },
+  {
+   "sym": "SP500",
+   "yubit": "SP500",
+   "cat": "indices",
+   "desc": "S&P 500"
+  },
+  {
+   "sym": "GER30",
+   "yubit": "GER30",
+   "cat": "indices",
+   "desc": "DAX 40"
+  },
+  {
+   "sym": "UK100",
+   "yubit": "UK100",
+   "cat": "indices",
+   "desc": "FTSE 100"
+  },
+  {
+   "sym": "AUS200",
+   "yubit": "AUS200",
+   "cat": "indices",
+   "desc": "ASX200"
+  }
+ ],
+ "commodities": [
+  {
+   "sym": "SUGAR",
+   "yubit": "SUGAR-RAW.s",
+   "cat": "commodities",
+   "desc": "Sugar-Raw"
+  },
+  {
+   "sym": "OJUICE",
+   "yubit": "ORANGE-JUICE.s",
+   "cat": "commodities",
+   "desc": "ORANGE-JUICE"
+  },
+  {
+   "sym": "NG",
+   "yubit": "XNGUSD.s",
+   "cat": "commodities",
+   "desc": "Natural Gas vs USD"
+  },
+  {
+   "sym": "GASOIL",
+   "yubit": "GASOIL.s",
+   "cat": "commodities",
+   "desc": "Low Sulphur Gasoil"
+  },
+  {
+   "sym": "COFFEE",
+   "yubit": "COFFEE_ARABICA.s",
+   "cat": "commodities",
+   "desc": "Coffee-Arabica"
+  },
+  {
+   "sym": "COCOA",
+   "yubit": "COCOA.s",
+   "cat": "commodities",
+   "desc": "US Cocoa"
+  },
+  {
+   "sym": "COTTON",
+   "yubit": "COTTON.s",
+   "cat": "commodities",
+   "desc": "COTTON"
+  },
+  {
+   "sym": "SOYBEAN",
+   "yubit": "SOYBEAN.s",
+   "cat": "commodities",
+   "desc": "Soybean"
+  },
+  {
+   "sym": "GASOLINE",
+   "yubit": "GASOLINE.s",
+   "cat": "commodities",
+   "desc": "Gasoline — NO Dukascopy feed, listed pending a source"
+  },
+  {
+   "sym": "WHEAT",
+   "yubit": "WHEAT.s",
+   "cat": "commodities",
+   "desc": "Wheat — NO Dukascopy feed, listed pending a source"
+  }
+ ],
+ "oil": [
+  {
+   "sym": "UKOUSD",
+   "yubit": "UKOUSD.s",
+   "cat": "oil",
+   "desc": "Brent vs USD"
+  },
+  {
+   "sym": "USOUSD",
+   "yubit": "USOUSD.s",
+   "cat": "oil",
+   "desc": "WTI vs USD"
+  }
+ ]
+}
