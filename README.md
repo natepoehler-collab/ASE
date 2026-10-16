@@ -2,7 +2,7 @@
 
 A Windows desktop app (Electron) that ranks tradeable markets by how much real, tradeable movement each one made over the last year. It covers crypto, US stocks, forex, indices, commodities, metals and oil.
 
-I built it with Claude (Anthropic's AI) as my coding partner. I'm not a software engineer. I designed what it should do, tested every build, and directed the fixes. It has gone through 100+ releases since June 2026, shipped directly to its users. Two other people use it, and I post updates to them through Discord. This repository is a snapshot of the current version (v1.30.40), not the full release history.
+I'm not a software engineer by trade, but I am one in practice. I built ASE with Claude (Anthropic's AI) as my development partner: I designed every feature, tested every build, and drove each fix, and Claude wrote the code. It has gone through 100+ releases since June 2026, shipped directly to its users. Two other people use it, and I post updates to them through Discord. This repository is a snapshot of the current version (v1.30.40), not the full release history.
 
 ## What it does
 
